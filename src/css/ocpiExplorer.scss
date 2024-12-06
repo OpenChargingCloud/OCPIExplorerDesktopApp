@@ -23,6 +23,7 @@ html {
 
             .screen {
 
+                display:                none;
                 width:                  100vw;
                 height:                 100vh;
 
@@ -111,10 +112,25 @@ html {
 
             #versionsScreen {
 
-                display:                none;
                 flex-direction:         column;
 
                 .versions {
+
+                    display:                flex;
+                    flex-direction:         column;
+                    height:                 100%;
+                    align-items:            center;
+                    justify-content:        center;
+
+                }
+
+            }
+
+            #versionDetailsScreen {
+
+                flex-direction:         column;
+
+                .versionDetails {
 
                     display:                flex;
                     flex-direction:         column;

@@ -42,6 +42,7 @@ declare global {
 
 
 import * as OCPPv2_1   from './IOCPIv2_1_1';
+import * as OCPPv2_2   from './IOCPIv2_2_1';
 
 interface WriteToScreenDelegate {
     (message: string|Element): void;
@@ -51,21 +52,31 @@ export class OCPIExplorer {
 
     //#region Data
 
-    private readonly appDiv:                                             HTMLDivElement;
-    private readonly connectScreen:                                      HTMLDivElement;
-    private readonly ocpiVersionsURLInput:                               HTMLInputElement;
-    private readonly ocpiAccessTokenInput:                               HTMLInputElement;
-    private readonly accessTokenEncodingCheck:                           HTMLInputElement;
-    private readonly connectButton:                                      HTMLButtonElement;
+    private          ocpiAccessToken:                                   string  = "";
+    private          ocpiAccessTokenEncoding:                           boolean = false;
 
-    private readonly versionsScreen:                                     HTMLDivElement;
-    private readonly versionsDiv:                                        HTMLDivElement;
-    private readonly versionsHTMLDiv:                                    HTMLDivElement;
-    private readonly versionsJSONDiv:                                    HTMLDivElement;
-    private readonly versionsScreenBottom:                               HTMLDivElement;
-    private readonly versionsScreenBackButton:                           HTMLButtonElement;
+    private readonly appDiv:                                            HTMLDivElement;
+    private readonly connectScreen:                                     HTMLDivElement;
+    private readonly ocpiVersionsURLInput:                              HTMLInputElement;
+    private readonly ocpiAccessTokenInput:                              HTMLInputElement;
+    private readonly accessTokenEncodingCheck:                          HTMLInputElement;
+    private readonly connectButton:                                     HTMLButtonElement;
 
-    private readonly WriteToScreen:                                      WriteToScreenDelegate;
+    private readonly versionsScreen:                                    HTMLDivElement;
+    private readonly versionsDiv:                                       HTMLDivElement;
+    private readonly versionsHTMLDiv:                                   HTMLDivElement;
+    private readonly versionsJSONDiv:                                   HTMLDivElement;
+    private readonly versionsScreenBottom:                              HTMLDivElement;
+    private readonly versionsScreenBackButton:                          HTMLButtonElement;
+
+    private readonly versionDetailsScreen:                              HTMLDivElement;
+    private readonly versionDetailsDiv:                                 HTMLDivElement;
+    private readonly versionDetailsHTMLDiv:                             HTMLDivElement;
+    private readonly versionDetailsJSONDiv:                             HTMLDivElement;
+    private readonly versionDetailsScreenBottom:                        HTMLDivElement;
+    private readonly versionDetailsScreenBackButton:                    HTMLButtonElement;
+
+    private readonly WriteToScreen:                                     WriteToScreenDelegate;
 
     //#endregion
 
@@ -81,7 +92,7 @@ export class OCPIExplorer {
 
         //#region Data
 
-        this.appDiv                    = document.          querySelector("#app")                       as HTMLDivElement;
+        this.appDiv                          = document.                 querySelector("#app")                   as HTMLDivElement;
 
         //#region Connect Screen
 
@@ -92,10 +103,10 @@ export class OCPIExplorer {
         this.connectButton             = this.connectScreen.querySelector("#connectButton")             as HTMLButtonElement;
 
         if (ocpiVersionsURL && ocpiVersionsURL.length > 0)
-            this.ocpiVersionsURLInput.value = ocpiVersionsURL;
+            this.ocpiVersionsURLInput.value       = ocpiVersionsURL;
 
         if (ocpiAccessToken && ocpiAccessToken.length > 0)
-            this.ocpiAccessTokenInput.value = ocpiAccessToken;
+            this.ocpiAccessTokenInput.value       = ocpiAccessToken;
 
         if (ocpiAccessTokenBase64 && ocpiAccessTokenBase64.length > 0)
             this.accessTokenEncodingCheck.checked = ocpiAccessTokenBase64 == "true";
@@ -103,18 +114,14 @@ export class OCPIExplorer {
         this.connectButton.onclick = async () => {
 
             const ocpiEndpointURL          = this.ocpiVersionsURLInput.value.trim();
-            const ocpiAccessToken          = this.ocpiAccessTokenInput.value.trim();
-            const ocpiAccessTokenEncoding  = this.ocpiAccessTokenInput.checked;
+            this. ocpiAccessToken          = this.ocpiAccessTokenInput.value.trim();
+            this. ocpiAccessTokenEncoding  = this.ocpiAccessTokenInput.checked;
 
             if (this.isValidURL(ocpiEndpointURL)) {
 
                 try {
 
-                    const [ocpiResponse, getHeader] = await this.OCPIGetAsync(
-                                                                ocpiEndpointURL,
-                                                                ocpiAccessToken,
-                                                                ocpiAccessTokenEncoding
-                                                            );
+                    const [ocpiResponse, getHeader] = await this.OCPIGetAsync(ocpiEndpointURL);
 
                     if (ocpiResponse.status_code >= 1000 &&
                         ocpiResponse.status_code <  2000)
@@ -129,18 +136,23 @@ export class OCPIExplorer {
                             ocpiResponse.data.length > 0)
                         {
 
+                            this.versionsHTMLDiv.innerHTML = "";
                             this.versionsJSONDiv.innerHTML = "<pre>" + JSON.stringify(ocpiResponse, null, 2) + "</pre>";
 
                             for (const version of (ocpiResponse.data as OCPPv2_1.IVersion[])) {
 
                                 // {
                                 //    "version":  "2.1.1",
-                                //    "url":      "https://api1.chargeit-mobility.com/ocpi/v2.1/versions/2.1.1"
+                                //    "url":      "https://api.charging.cloud/ocpi/versions/2.1.1"
                                 // }
 
                                 const versionIdDiv      = this.versionsHTMLDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                                 versionIdDiv.className  = "version";
                                 versionIdDiv.innerHTML  = "Version " + version.version + "<br /><span class=\"versionLink\">" + version.url + "</span>";
+
+                                versionIdDiv.onclick = async () => {
+                                    this.GetVersionDetails(version.url);
+                                };
 
                             }
                         
@@ -163,17 +175,34 @@ export class OCPIExplorer {
 
         //#region Version Screen
 
-        this.versionsScreen            = this.appDiv.              querySelector("#versionsScreen")  as HTMLDivElement;
-        this.versionsDiv               = this.versionsScreen.      querySelector(".versions")        as HTMLDivElement;
-        this.versionsHTMLDiv           = this.versionsDiv.         querySelector(".versionsHTML")    as HTMLDivElement;
-        this.versionsJSONDiv           = this.versionsDiv.         querySelector(".versionsJSON")    as HTMLDivElement;
+        this.versionsScreen                  = this.appDiv.              querySelector("#versionsScreen")        as HTMLDivElement;
+        this.versionsDiv                     = this.versionsScreen.      querySelector(".versions")              as HTMLDivElement;
+        this.versionsHTMLDiv                 = this.versionsDiv.         querySelector(".versionsHTML")          as HTMLDivElement;
+        this.versionsJSONDiv                 = this.versionsDiv.         querySelector(".versionsJSON")          as HTMLDivElement;
 
-        this.versionsScreenBottom      = this.versionsScreen.      querySelector(".bottom")          as HTMLDivElement;
-        this.versionsScreenBackButton  = this.versionsScreenBottom.querySelector(".backButton")      as HTMLButtonElement;
+        this.versionsScreenBottom            = this.versionsScreen.      querySelector(".bottom")                as HTMLDivElement;
+        this.versionsScreenBackButton        = this.versionsScreenBottom.querySelector(".backButton")            as HTMLButtonElement;
 
         this.versionsScreenBackButton.onclick = async () => {
             this.connectScreen.style.display   = "flex";
             this.versionsScreen.style.display  = "none";
+        };
+
+        //#endregion
+
+        //#region Version Details Screen
+
+        this.versionDetailsScreen            = this.appDiv.              querySelector("#versionDetailsScreen")  as HTMLDivElement;
+        this.versionDetailsDiv               = this.versionDetailsScreen.querySelector(".versionDetails")        as HTMLDivElement;
+        this.versionDetailsHTMLDiv           = this.versionDetailsDiv.   querySelector(".versionDetailsHTML")    as HTMLDivElement;
+        this.versionDetailsJSONDiv           = this.versionDetailsDiv.   querySelector(".versionDetailsJSON")    as HTMLDivElement;
+
+        this.versionDetailsScreenBottom      = this.versionDetailsScreen.querySelector(".bottom")                as HTMLDivElement;
+        this.versionDetailsScreenBackButton  = this.versionDetailsScreen.querySelector(".backButton")            as HTMLButtonElement;
+
+        this.versionDetailsScreenBottom.onclick = async () => {
+            this.versionsScreen.style.display        = "flex";
+            this.versionDetailsScreen.style.display  = "none";
         };
 
         //#endregion
@@ -187,37 +216,102 @@ export class OCPIExplorer {
 
 
 
+    private async GetVersionDetails(VersionDetailsURL: string)
+    {
+
+        const [ocpiResponse, getHeader] = await this.OCPIGetAsync(VersionDetailsURL);
+
+        if (ocpiResponse.status_code >= 1000 &&
+            ocpiResponse.status_code <  2000)
+        {
+
+            this.versionsScreen.style.display        = "none";
+            this.versionDetailsScreen.style.display  = "flex";
+
+            if (ocpiResponse.data.version &&
+                Array.isArray(ocpiResponse.data.endpoints) &&
+                ocpiResponse.data.endpoints.length > 0)
+            {
+
+                this.versionDetailsHTMLDiv.innerHTML = "";
+                this.versionDetailsJSONDiv.innerHTML = "<pre>" + JSON.stringify(ocpiResponse, null, 2) + "</pre>";
+
+                const versionId = ocpiResponse.data.version as string;
+
+                if (versionId.startsWith("2.1"))
+                    for (const endpoint of (ocpiResponse.data.endpoints as OCPPv2_1.IEndpoint[])) {
+
+                        // {
+                        //     "identifier": "locations",
+                        //     "url":        "https://api.charging.cloud/ocpi/v2.1.1/cpo/locations"
+                        // }
+
+                        const endpointDiv      = this.versionDetailsHTMLDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                        endpointDiv.className  = "endpoint";
+                        endpointDiv.innerHTML  = endpoint.identifier + "<br /><span class=\"endpointLink\">" + endpoint.url + "</span>";
+
+                        // endpointDiv.onclick = async () => {
+                        //     this.GetVersionDetails(version.url);
+                        // };
+
+                    }
+
+                else if (versionId.startsWith("2.2"))
+                    for (const endpoint of (ocpiResponse.data.endpoints as OCPPv2_2.IEndpoint[])) {
+
+                        // {
+                        //     "identifier": "locations",
+                        //     "role":       "SENDER",
+                        //     "url":        "https://api.charging.cloud/ocpi/v2.1.1/cpo/locations"
+                        // }
+
+                        const endpointDiv      = this.versionDetailsHTMLDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                        endpointDiv.className  = "endpoint";
+                        endpointDiv.innerHTML  = endpoint.identifier + "<br />" + endpoint.role + "<br /><span class=\"endpointLink\">" + endpoint.url + "</span>";
+
+                        // endpointDiv.onclick = async () => {
+                        //     this.GetVersionDetails(version.url);
+                        // };
+
+                    }
+
+
+            }
+
+        }
+
+    }
 
 
 
 
-    private async OCPIGetAsync(RessourceURI:         string,
-                               AccessToken:          string,
-                               AccessTokenEncoding:  boolean): Promise<[OCPPv2_1.IOCPIResponse, (key: string) => string | null]> {
+
+
+    private async OCPIGetAsync(RessourceURL: string): Promise<[OCPPv2_1.IOCPIResponse, (key: string) => string | null]> {
 
         return new Promise((resolve, reject) => {
-    
+
             const ajax = new XMLHttpRequest();
-            ajax.open("GET", RessourceURI, true);
+            ajax.open("GET", RessourceURL, true);
             ajax.setRequestHeader("Accept",    "application/json; charset=UTF-8");
 
-            if (AccessToken.length > 0)
-                ajax.setRequestHeader("Authorization", "Token " + (AccessTokenEncoding ? btoa(AccessToken) : AccessToken));
-    
+            if (this.ocpiAccessToken.length > 0)
+                ajax.setRequestHeader("Authorization", "Token " + (this.ocpiAccessTokenEncoding ? btoa(this.ocpiAccessToken) : this.ocpiAccessToken));
+
             ajax.onreadystatechange = function () {
                 if (this.readyState == 4) {
                     if (this.status >= 100 && this.status < 300) {
                         try {
-    
+
                             const ocpiResponse = JSON.parse(ajax.responseText) as OCPPv2_1.IOCPIResponse;
-    
+
                             if (ocpiResponse.status_code >= 1000 &&
                                 ocpiResponse.status_code <  2000) {
                                 resolve([ocpiResponse, (key: string) => ajax.getResponseHeader(key)]);
                             }
                             else
                                 reject(new Error(ocpiResponse.status_code + (ocpiResponse.status_message ? ": " + ocpiResponse.status_message : "")));
-    
+
                         }
                         catch (exception: any) {
                             reject(new Error(exception));
@@ -227,11 +321,11 @@ export class OCPIExplorer {
                     }
                 }
             };
-    
+
             ajax.send();
-    
+
         });
-    
+
     }
 
 

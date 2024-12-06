@@ -34,7 +34,6 @@
 
   </head>
 
-
   <body>
 
     <div id="app">
@@ -42,7 +41,7 @@
         <div id="connectScreen" class="screen">
             <div id="ocpiEndpoint">
                 <div id="inputs">
-                    <input id="ocpiVersionsURLInput" type="url"  placeholder="Your OCPI versions endpoint...">
+                    <input id="ocpiVersionsURLInput" type="url"  placeholder="The OCPI versions endpoint...">
                     <input id="ocpiAccessTokenInput" type="text" placeholder="Your OCPI access token...">
                     <div id="accessTokenEncoding">
                         <input id="accessTokenEncodingCheck" type="checkbox" name="accessTokenEncoding">
@@ -59,6 +58,51 @@
                 <div class="versions">
                     <div class="versionsHTML"></div>
                     <div class="versionsJSON"></div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <button class="backButton">Back</button>
+            </div>
+
+        </div>
+
+        <div id="versionDetailsScreen" class="screen">
+
+            <div class="top">
+                <div class="versionDetails">
+                    <div class="versionDetailsHTML"></div>
+                    <div class="versionDetailsJSON"></div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <button class="backButton">Back</button>
+            </div>
+
+        </div>
+
+        <div id="locationsScreen" class="screen">
+
+            <div class="top">
+                <div class="locations">
+                    <div class="locationsHTML"></div>
+                    <div class="locationsJSON"></div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <button class="backButton">Back</button>
+            </div>
+
+        </div>
+
+        <div id="tariffsScreen" class="screen">
+
+            <div class="top">
+                <div class="tariffs">
+                    <div class="tariffsHTML"></div>
+                    <div class="tariffsJSON"></div>
                 </div>
             </div>
 

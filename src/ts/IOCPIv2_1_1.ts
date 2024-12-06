@@ -43,9 +43,9 @@ export interface IVersion {
     url:                             string;
 }
 
-export interface IVersionDetails {
+export interface IVersionDetail {
     version:                         VersionNumber;
-    endpoints:                       Array<IEndpoints>;
+    endpoints:                       Array<IEndpoint>;
 }
 
 export type ModuleId =
@@ -60,14 +60,9 @@ export type ModuleId =
     "tokens"           |
      string;
 
-export type InterfaceRole =
-    "SENDER" |
-    "RECEIVER";
-
-export interface IEndpoints {
-    identifier:                      ModuleId;
-    role:                            InterfaceRole;
-    url:                             string;
+export interface IEndpoint {
+    identifier:                     ModuleId;
+    url:                            string;
 }
 
 export interface ILocation {
@@ -94,7 +89,7 @@ export interface ILocation {
     images?:                        Array<IImage>;
     energy_mix?:                    IEnergyMix;
     publish?:                       boolean;                    // An OCPI v2.1.1 PlugSurfing extension!
-    created?:                       string;                     // Optional timestamp when this location was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this location was created [OCPI Computer Science Extension!]
     last_updated:                   string;
 }
 
@@ -278,14 +273,14 @@ export interface IEVSE {
     status_schedule?:               Array<IStatusSchedule>;
     capabilities?:                  Array<string>;
     connectors:                     Array<IConnector>;
-    energy_meter?:                  IEnergyMeter;               // Optional energy meter [OCPI Computer Science extension!]
+    energy_meter?:                  IEnergyMeter;               // Optional energy meter [OCPI Computer Science Extension!]
     floor_level?:                   string;
     coordinates:                    ICoordinates;
     physical_reference?:            string;
     directions?:                    Array<IDisplayText>;
     parking_restrictions?:          Array<string>;
     images?:                        Array<IImage>;
-    created?:                       string;                     // Optional timestamp when this EVSE was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this EVSE was created [OCPI Computer Science Extension!]
     last_updated:                   string;
 }
 
@@ -304,7 +299,7 @@ export interface IConnector {
     amperage:                       number;
     tariff_id?:                     string;
     terms_and_conditions?:          string;
-    created?:                       string;                     // Optional timestamp when this connector was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this connector was created [OCPI Computer Science Extension!]
     last_updated:                   string;
 }
 
@@ -316,7 +311,7 @@ export interface ITariff {
     tariff_alt_url?:                string,                     // Alternative URL to tariff info
     elements:                       Array<ITariffElement>,      // List of tariff elements
     energy_mix?:                    IEnergyMix,                 // Details on the energy supplied with this tariff.
-    created?:                       string;                     // Optional timestamp when this Tariff was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this Tariff was created [OCPI Computer Science Extension!]
     last_updated:                   string                      // Timestamp when this tariff was last updated(or created).
 }
 export interface ITariffMetadata extends TMetadataDefaults {
@@ -392,7 +387,7 @@ export interface IToken {
     valid:                          boolean;                    // Is this Token valid
     whitelist:                      WhitelistType;              // Indicates what type of white-listing is allowed.
     language?:                      string;                     // Language Code ISO 639-1. This optional field indicates the Token owner's preferred interface language. If the language is not provided or not supported then the CPO is free to choose its own language.
-    created?:                       string;                     // Optional timestamp when this token was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this token was created [OCPI Computer Science Extension!]
     last_updated:                   string;                     // Timestamp when this Token was last updated (or created).
 }
 
@@ -445,7 +440,7 @@ export interface ISession {
     charging_periods?:              Array<IChargingPeriod>;     // Optional list of charging periods.
     total_cost?:                    number;                     // The total cost (excluding VAT) of the session in the specified currency. This is the price that the eMSP will have to pay to the CPO. A total_cost of 0.00 means free of charge. When omitted, no price information is given in the Session object, this does not have to mean it is free of charge.
     status:                         SessionStatus;              // The status of the session.
-    created?:                       string;                     // Optional timestamp when this session was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this session was created [OCPI Computer Science Extension!]
     last_updated:                   string;                     // Timestamp when this session was last updated (or created).
 }
 
@@ -470,7 +465,7 @@ export interface ICDR {
     total_time:                     number;                     // Total duration of this session (including the duration of charging and not charging), in hours.
     total_parking_time?:            number;                     // Total duration during this session that the EV is not being charged (no energy being transfered between EVSE and EV), in hours.
     remark?:                        string;                     // Optional remark, can be used to provide addition human readable information to the CDR, for example: reason why a transaction was stopped.
-    created?:                       string;                     // Optional timestamp when this CDR was created [OCPI Computer Science extension!]
+    created?:                       string;                     // Optional timestamp when this CDR was created [OCPI Computer Science Extension!]
     last_updated:                   string;                     // Timestamp when this CDR was last updated (or created).
 }
 
@@ -548,7 +543,7 @@ export interface IEnergyMeter {
 
 }
 
-// OCPI Computer Science extension!
+// OCPI Computer Science Extension!
 export interface ITransparencySoftwareStatus {
     transparency_software:           ITransparencySoftware;
     legal_status:                    string;
@@ -558,7 +553,7 @@ export interface ITransparencySoftwareStatus {
     not_after:                       string;
 }
 
-// OCPI Computer Science extension!
+// OCPI Computer Science Extension!
 export interface ITransparencySoftware {
     name:                            string;
     version:                         string;
@@ -570,7 +565,7 @@ export interface ITransparencySoftware {
     source_code_repository?:         string;
 }
 
-// OCPI Computer Science extension!
+// OCPI Computer Science Extension!
 export interface IOpenSourceLicense {
     id:                              string;
     description?:                    Array<IDisplayText>;
