@@ -1,0 +1,38 @@
+{
+  "name": "ocpi_desktop_app",
+  "version": "1.0.0",
+  "description": "An OCPI test application based on Electron",
+  "main": "src/main.cjs",
+  "type": "module",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/OpenChargingCloud/OCPIExplorer",
+  "keywords": [
+    "Open Charging Cloud",
+    "e-mobility",
+    "OCPI",
+    "WWCP",
+    "testing",
+    "certification"
+  ],
+  "author": "GraphDefined GmbH <achim.friedland@graphdefined.com>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/OpenChargingCloud/OCPIExplorer",
+  "devDependencies": {
+    "@types/elliptic": "^6.4.18",
+    "@types/node": "^22.10.1",
+    "@types/ws": "^8.5.13",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-localshortcut": "^3.2.1",
+    "sass": "^1.82.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.7.2",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
