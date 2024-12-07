@@ -15,15 +15,17 @@
  * limitations under the License.
  */
 
-import * as OCPP from './OCPIExplorer';
+import * as OCPI from './OCPIExplorer';
 
 class ocpiApp {
 
     //#region Data
 
-    private ipcRenderer = require('electron').ipcRenderer;
+    private readonly ipcRenderer = require('electron').ipcRenderer;
 
-    private readonly ocpiExplorerApp:  OCPP.OCPIExplorer;
+    private readonly appDiv:           HTMLDivElement;
+    private readonly cliParameters:    any;
+    private readonly ocpiExplorerApp:  OCPI.OCPIExplorer;
     private readonly LogView:          HTMLDivElement;
 
     //#endregion
@@ -31,29 +33,17 @@ class ocpiApp {
     constructor()
     {
 
-        const cli             = this.ipcRenderer.sendSync('getCLIParameters');
+        this.appDiv           = document.querySelector("#app") as HTMLDivElement;
+        this.cliParameters    = this.ipcRenderer.sendSync('getCLIParameters');
 
-        this.ocpiExplorerApp  = new OCPP.OCPIExplorer(
-                                    (t) => this.writeToScreen(t),
-                                    cli?.ocpiVersionsURL,
-                                    cli?.ocpiAccessToken,
-                                    cli?.ocpiAccessTokenBase64
+        this.ocpiExplorerApp  = new OCPI.OCPIExplorer(
+                                    this.appDiv,
+                                    this.cliParameters?.ocpiVersionsURL,
+                                    this.cliParameters?.ocpiAccessToken,
+                                    this.cliParameters?.ocpiAccessTokenBase64
                                 );
 
         this.LogView          = document.querySelector("#logView") as HTMLDivElement;
-
-    }
-
-    private writeToScreen(message: string|Element) {
-
-        if (typeof message === 'string')
-            this.LogView.insertAdjacentHTML("afterbegin",
-                                            "<p>" + message + "</p>");
-
-        else
-            this.LogView.insertAdjacentElement("afterbegin",
-                                               document.createElement('p').
-                                                        appendChild(message));
 
     }
 

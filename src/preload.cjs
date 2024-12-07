@@ -15,13 +15,13 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
 
-  onWebSocketClientConnected: (callback) => ipcRenderer.on  ('webSocketClientConnected', (event, data)    => callback(data)),
-  onWSTextMessage:            (callback) => ipcRenderer.on  ('wsTextMessageReceived',    (event, message) => callback(message)),
-  onWSBinaryMessage:          (callback) => ipcRenderer.on  ('wsBinaryMessageReceived',  (event, message) => callback(message)),
-  onWSClientDisconnected:     (callback) => ipcRenderer.on  ('wsClientDisconnected',     (event, data)    => callback(data)),
+  // onWebSocketClientConnected: (callback) => ipcRenderer.on  ('webSocketClientConnected', (event, data)    => callback(data)),
+  // onWSTextMessage:            (callback) => ipcRenderer.on  ('wsTextMessageReceived',    (event, message) => callback(message)),
+  // onWSBinaryMessage:          (callback) => ipcRenderer.on  ('wsBinaryMessageReceived',  (event, message) => callback(message)),
+  // onWSClientDisconnected:     (callback) => ipcRenderer.on  ('wsClientDisconnected',     (event, data)    => callback(data)),
 
-  sendWSTextMessage:          (message)  => ipcRenderer.send('send-WSTextMessage',   textMessage),
-  sendWSBinaryMessage:        (message)  => ipcRenderer.send('send-WSBinaryMessage', binaryMessage),
+  // sendWSTextMessage:          (message)  => ipcRenderer.send('send-WSTextMessage',   textMessage),
+  // sendWSBinaryMessage:        (message)  => ipcRenderer.send('send-WSBinaryMessage', binaryMessage),
 
 
   on: (channel, callback) => {
