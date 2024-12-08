@@ -17,12 +17,35 @@ $ npm install
 ```
 
 
-## Start
+## Debugging
 
-Start the Electron App using the given OCPI Versions URL and acess token, which will be BASE64 encoded before transmission.
+In order to build SCSS styles, TypeScript, to bundle the Electron App using webpack, and to start in debug mode just enter:
+
+```
+./run.sh
+```
+
+Alternatively you can also start the app using a given OCPI Versions URL and an OCPI Acess Token, which will in this case be BASE64 encoded before transmission.    
+All parameters are optional.
 
 ```
 ./run.sh --url=https://api.example.org/ocpi2.1/versions --token=abcd --base64
+```
+
+
+## Start
+
+In order to start without debugging:
+
+```
+electron .
+```
+
+Again you can also start the app using a given OCPI Versions URL and an OCPI Acess Token, which will in this case be BASE64 encoded before transmission.    
+All parameters are optional.
+
+```
+electron . --url=https://api.example.org/ocpi2.1/versions --token=abcd --base64
 ```
 
 
