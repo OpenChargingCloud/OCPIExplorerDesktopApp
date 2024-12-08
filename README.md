@@ -8,12 +8,25 @@ This project implements the [**Open Charge Point Interface (OCPI)**](https://git
 - [OCPI v3.0](https://github.com/ocpi/ocpi/tree/release-2.1.1-bugfixes) *(planned)*
 
 
-## (Re-)Build
+
+## Installation
 
 Install the required Node.js modules...
 ```
 $ npm install
 ```
+
+
+## Start
+
+Start the Electron App using the given OCPI Versions URL and acess token, which will be BASE64 encoded before transmission.
+
+```
+./run.sh --url=https://api.example.org/ocpi2.1/versions --token=abcd --base64
+```
+
+
+## Security
 
 (Security) updates...
 ```
