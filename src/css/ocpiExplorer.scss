@@ -19,6 +19,7 @@
 $screenBackgroundColor:  #ececfd;
 $inputBackgroundColor:   #d4d4fc;
 $buttonBackgroundColor:  #bebefb;
+$backgroundColor:        #e4e4f8;
 $hoverColor:             #9999ff;
 
 html {
@@ -54,6 +55,46 @@ html {
 
             }
 
+            .defaultHTMLCollection {
+                display:                flex;
+                flex-direction:         column;
+                gap:                    1px;
+            }
+
+            .defaultBox {
+
+                display:                flex;
+                padding:                20px 35px;
+                background-color:       $backgroundColor;
+                border-radius:          10px;
+
+                &:hover {
+                    background-color:       $hoverColor;
+                }
+
+            }
+
+            .debugJSON {
+
+                font-size:              75%;
+                color:                  #DDDDDD;
+                margin:                 2px 10px;
+                padding:                8px 16px;
+                border-radius:          4px;
+                user-select:            none;
+
+                &:hover {
+                    color:                  #4c4cc0;
+                    background-color:       #EEEEEE;
+                }
+
+            }
+
+            .jsonView {
+                display:                none;
+            }
+
+
             #connectScreen {
 
                 display:                flex;
@@ -67,8 +108,8 @@ html {
                     flex-direction:         row;
                     gap:                    4px;
                     padding:                20px 35px;
-                    background-color:       #e4e4f8;
                     border-radius:          10px;
+                    user-select:            none;
 
                     #inputs {
 
@@ -139,6 +180,35 @@ html {
                     align-items:            center;
                     justify-content:        center;
 
+                    .versionsHTML {
+                        .version {
+
+                            flex-direction:     column;
+
+                            .versionId {
+                                font-size:          125%;
+                            }
+
+                            .versionURL {
+
+                                font-size:          75%;
+                                margin-top:         2px;
+
+                                i {
+
+                                    user-select:        none;
+
+                                    &:hover {
+                                        color:              #4c4cc0;
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    }
+
                 }
 
             }
@@ -154,6 +224,47 @@ html {
                     height:                 100%;
                     align-items:            center;
                     justify-content:        center;
+
+                    .versionDetailsHTML {
+                        .endpoint {
+
+                            .identifierLogo {
+                                font-size:          165%;
+                                padding:            10px;
+                                user-select:        none;
+                            }
+
+                            .right {
+
+                                display:            flex;
+                                flex-direction:     column;
+                                justify-content:    center;
+                                gap:                2px;
+
+                                .identifier {
+                                    font-size:          125%;
+                                }
+
+                                .url {
+
+                                    font-size:          75%;
+
+                                    i {
+
+                                        user-select:        none;
+
+                                        &:hover {
+                                            color:              #4c4cc0;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    }
 
                 }
 

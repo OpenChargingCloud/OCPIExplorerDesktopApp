@@ -38,17 +38,41 @@ export class OCPIV2_1_1 {
             // }
 
             const endpointDiv        = container.appendChild(document.createElement('div')) as HTMLDivElement;
-            endpointDiv.className    = "endpoint";
+            endpointDiv.className    = "endpoint defaultBox";
 
-            const identifierDiv      = endpointDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+            const identifier1Div      = endpointDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+            identifier1Div.className  = `identifierLogo ${endpoint.identifier}`;
+
+            switch (endpoint.identifier) {
+                case "credentials": identifier1Div.innerHTML = '<i class="fa-regular fa-id-card"></i>';           break;
+                case "locations":   identifier1Div.innerHTML = '<i class="fa-solid fa-charging-station"></i>';    break;
+                case "tariffs":     identifier1Div.innerHTML = '<i class="fa-solid fa-money-bill-trend-up"></i>'; break;
+                case "tokens":      identifier1Div.innerHTML = '<i class="fa-solid fa-passport"></i>';            break;
+                case "sessions":    identifier1Div.innerHTML = '<i class="fa-solid fa-user-clock"></i>';          break;
+                case "cdrs":        identifier1Div.innerHTML = '<i class="fa-solid fa-file-invoice-dollar"></i>'; break;
+                case "commands":    identifier1Div.innerHTML = '<i class="fa-solid fa-terminal"></i>';            break;
+                default:            identifier1Div.innerHTML = '<i class="fa-solid fa-square-binary"></i>';       break;
+            }
+
+            const rightDiv      = endpointDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+            rightDiv.className  = "right";
+
+            const identifierDiv      = rightDiv.appendChild(document.createElement('div')) as HTMLDivElement;
             identifierDiv.className  = "identifier";
             identifierDiv.innerHTML  = endpoint.identifier;
 
-            const urlDiv             = endpointDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-            urlDiv.className         = "identifier";
-            urlDiv.innerHTML         = endpoint.url;
+            const urlDiv             = rightDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+            urlDiv.className         = "url";
+            urlDiv.innerHTML         = `${endpoint.url} <i class="fa-regular fa-copy"></i>`;
 
-            //`${endpoint.identifier}<br /><span class="endpointLink">${endpoint.url}</span>`;
+            (urlDiv.querySelector("i") as HTMLDivElement).onclick = () => {
+                const url = endpoint.url;
+                navigator.clipboard.writeText(url).then(() => {
+                    console.log(`URL ${url} copied to clipboard!`);
+                }).catch(err => {
+                    console.error('Failed to copy URL: ', err);
+                });
+            };
 
             if (endpoint.identifier === "locations")
                 endpointDiv.onclick = async () => {

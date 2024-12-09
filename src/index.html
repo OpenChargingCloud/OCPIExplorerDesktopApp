@@ -39,7 +39,7 @@
     <div id="app">
 
         <div id="connectScreen" class="screen">
-            <div id="ocpiEndpoint">
+            <div id="ocpiEndpoint" class="defaultBox">
                 <div id="inputs">
                     <input id="ocpiVersionsURLInput" type="url"  placeholder="The OCPI versions endpoint...">
                     <input id="ocpiAccessTokenInput" type="text" placeholder="Your OCPI access token...">
@@ -56,8 +56,11 @@
 
             <div class="top">
                 <div class="versions">
-                    <div class="versionsHTML"></div>
-                    <div class="versionsJSON"></div>
+                    <div class="defaultHTMLCollection versionsHTML"></div>
+                    <div class="debugJSON">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="jsonView versionsJSON"></div>
                 </div>
             </div>
 
@@ -71,8 +74,11 @@
 
             <div class="top">
                 <div class="versionDetails">
-                    <div class="versionDetailsHTML"></div>
-                    <div class="versionDetailsJSON"></div>
+                    <div class="defaultHTMLCollection versionDetailsHTML"></div>
+                    <div class="debugJSON">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="jsonView versionDetailsJSON"></div>
                 </div>
             </div>
 
@@ -86,8 +92,11 @@
 
             <div class="top">
                 <div class="locations">
-                    <div class="locationsHTML"></div>
-                    <div class="locationsJSON"></div>
+                    <div class="defaultHTMLCollection locationsHTML"></div>
+                    <div class="debugJSON">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="jsonView locationsJSON"></div>
                 </div>
             </div>
 
@@ -101,8 +110,11 @@
 
             <div class="top">
                 <div class="tariffs">
-                    <div class="tariffsHTML"></div>
-                    <div class="tariffsJSON"></div>
+                    <div class="defaultHTMLCollection tariffsHTML"></div>
+                    <div class="debugJSON">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="jsonView tariffsJSON"></div>
                 </div>
             </div>
 
@@ -111,8 +123,6 @@
             </div>
 
         </div>
-
-    </div>
 
     <script src="./renderer.cjs"></script>
 

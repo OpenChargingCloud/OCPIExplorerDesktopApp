@@ -64,6 +64,7 @@ export class OCPIExplorer {
     private readonly versionsScreen:                  HTMLDivElement;
     private readonly versionsDiv:                     HTMLDivElement;
     private readonly versionsHTMLDiv:                 HTMLDivElement;
+    private readonly versionsDebugJSONDiv:            HTMLDivElement;
     private readonly versionsJSONDiv:                 HTMLDivElement;
     private readonly versionsScreenBottom:            HTMLDivElement;
     private readonly versionsScreenBackButton:        HTMLButtonElement;
@@ -71,6 +72,7 @@ export class OCPIExplorer {
     private readonly versionDetailsScreen:            HTMLDivElement;
     private readonly versionDetailsDiv:               HTMLDivElement;
     private readonly versionDetailsHTMLDiv:           HTMLDivElement;
+    private readonly versionDetailsDebugJSONDiv:      HTMLDivElement;
     private readonly versionDetailsJSONDiv:           HTMLDivElement;
     private readonly versionDetailsScreenBottom:      HTMLDivElement;
     private readonly versionDetailsScreenBackButton:  HTMLButtonElement;
@@ -133,6 +135,11 @@ export class OCPIExplorer {
                         {
 
                             this.versionsHTMLDiv.innerHTML = "";
+
+                            this.versionsDebugJSONDiv.onclick = () => {
+                                this.versionsJSONDiv.style.display = this.versionsJSONDiv.style.display !== "block" ? "block" : "none";
+                            };
+
                             this.versionsJSONDiv.innerHTML = "<pre>" + JSON.stringify(ocpiResponse, null, 2) + "</pre>";
 
                             for (const version of (ocpiResponse.data as OCPI.IVersion[])) {
@@ -143,13 +150,13 @@ export class OCPIExplorer {
                                 // }
 
                                 const versionDiv        = this.versionsHTMLDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                                versionDiv.className    = "version";
+                                versionDiv.className    = "defaultBox version";
 
                                 const versionIdDiv      = versionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                                 versionIdDiv.className  = "versionId";
                                 versionIdDiv.innerHTML  = version.version;
 
-                                const urlDiv            = versionIdDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                                const urlDiv            = versionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                                 urlDiv.className        = "versionURL";
                                 urlDiv.innerHTML        = version.url;
 
@@ -181,6 +188,7 @@ export class OCPIExplorer {
         this.versionsScreen                  = this.baseDiv.             querySelector("#versionsScreen")        as HTMLDivElement;
         this.versionsDiv                     = this.versionsScreen.      querySelector(".versions")              as HTMLDivElement;
         this.versionsHTMLDiv                 = this.versionsDiv.         querySelector(".versionsHTML")          as HTMLDivElement;
+        this.versionsDebugJSONDiv            = this.versionsDiv.         querySelector(".debugJSON")             as HTMLDivElement;
         this.versionsJSONDiv                 = this.versionsDiv.         querySelector(".versionsJSON")          as HTMLDivElement;
 
         this.versionsScreenBottom            = this.versionsScreen.      querySelector(".bottom")                as HTMLDivElement;
@@ -198,6 +206,7 @@ export class OCPIExplorer {
         this.versionDetailsScreen            = this.baseDiv.             querySelector("#versionDetailsScreen")  as HTMLDivElement;
         this.versionDetailsDiv               = this.versionDetailsScreen.querySelector(".versionDetails")        as HTMLDivElement;
         this.versionDetailsHTMLDiv           = this.versionDetailsDiv.   querySelector(".versionDetailsHTML")    as HTMLDivElement;
+        this.versionDetailsDebugJSONDiv      = this.versionDetailsDiv.   querySelector(".debugJSON")             as HTMLDivElement;
         this.versionDetailsJSONDiv           = this.versionDetailsDiv.   querySelector(".versionDetailsJSON")    as HTMLDivElement;
 
         this.versionDetailsScreenBottom      = this.versionDetailsScreen.querySelector(".bottom")                as HTMLDivElement;
@@ -235,6 +244,11 @@ export class OCPIExplorer {
             {
 
                 this.versionDetailsHTMLDiv.innerHTML = "";
+
+                this.versionDetailsDebugJSONDiv.onclick = () => {
+                    this.versionDetailsJSONDiv.style.display = this.versionDetailsJSONDiv.style.display !== "block" ? "block" : "none";
+                };
+
                 this.versionDetailsJSONDiv.innerHTML = "<pre>" + JSON.stringify(ocpiResponse, null, 2) + "</pre>";
 
                 const versionId = ocpiResponse.data.version as string;

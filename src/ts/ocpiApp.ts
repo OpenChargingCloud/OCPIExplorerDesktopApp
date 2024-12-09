@@ -17,6 +17,8 @@
 
 import * as OCPI from './OCPIExplorer';
 
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 class ocpiApp {
 
     //#region Data
@@ -44,6 +46,7 @@ class ocpiApp {
                                 );
 
         this.LogView          = document.querySelector("#logView") as HTMLDivElement;
+        //this.LogView.innerHTML = 'XXXX';
 
     }
 
