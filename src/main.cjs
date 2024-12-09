@@ -65,9 +65,9 @@ ipcMain.on('send-WSTextMessage', (event, { clientId, message }) => {
 });
 
 ipcMain.on('getCLIParameters', (event) => {
-   event.returnValue = {
-      ocpiVersionsURL:        app.commandLine.getSwitchValue('url'),
-      ocpiAccessToken:        app.commandLine.getSwitchValue('token'),
-      ocpiAccessTokenBase64:  app.commandLine.getSwitchValue('base64')
-   };
+    event.returnValue = {
+        ocpiVersionsURL:        app.commandLine.getSwitchValue('url'),
+        ocpiAccessToken:        app.commandLine.getSwitchValue('token'),
+        ocpiAccessTokenBase64:  app.commandLine.hasSwitch     ('nobase64')
+    };
 });

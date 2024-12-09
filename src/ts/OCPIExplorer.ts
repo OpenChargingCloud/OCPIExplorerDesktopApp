@@ -82,7 +82,7 @@ export class OCPIExplorer {
     constructor(baseDiv:                 HTMLDivElement,
                 ocpiVersionsURL?:        string,
                 ocpiAccessToken?:        string,
-                ocpiAccessTokenBase64?:  string)
+                ocpiAccessTokenBase64?:  boolean)
     {
 
         this.baseDiv = baseDiv;
@@ -101,8 +101,8 @@ export class OCPIExplorer {
         if (ocpiAccessToken && ocpiAccessToken.length > 0)
             this.ocpiAccessTokenInput.value       = ocpiAccessToken;
 
-        if (ocpiAccessTokenBase64 && ocpiAccessTokenBase64.length > 0)
-            this.accessTokenEncodingCheck.checked = ocpiAccessTokenBase64 == "true";
+        if (ocpiAccessTokenBase64 ?? true)
+            this.accessTokenEncodingCheck.checked = ocpiAccessTokenBase64 ?? true;
 
         this.connectButton.onclick = async () => {
 

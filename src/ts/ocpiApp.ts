@@ -38,9 +38,9 @@ class ocpiApp {
 
         this.ocpiExplorerApp  = new OCPI.OCPIExplorer(
                                     this.appDiv,
-                                    this.cliParameters?.ocpiVersionsURL,
-                                    this.cliParameters?.ocpiAccessToken,
-                                    this.cliParameters?.ocpiAccessTokenBase64
+                                    this.cliParameters.ocpiVersionsURL,
+                                    this.cliParameters.ocpiAccessToken,
+                                   !this.cliParameters.ocpiAccessTokenBase64
                                 );
 
         this.LogView          = document.querySelector("#logView") as HTMLDivElement;
