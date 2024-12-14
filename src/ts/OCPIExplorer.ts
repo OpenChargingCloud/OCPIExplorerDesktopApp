@@ -24,7 +24,10 @@ import * as IOCPIv2_2_1   from './IOCPIv2_2_1';
 import     { OCPIV2_2_1 } from './OCPIV2_2_1';
 
 import * as IOCPIv2_3     from './IOCPIv2_3';
-import     { OCPIV2_3 }   from './OCPIV2_3';
+import     { OCPIV2_3 }   from './OCPIv2_3';
+
+import * as IOCPIv3_0     from './IOCPIv3_0';
+import     { OCPIV3_0 }   from './OCPIv3_0';
 
 
 export interface ElectronAPI {
@@ -52,6 +55,7 @@ export class OCPIExplorer {
     private readonly ocpiv2_1_1:                      OCPIV2_1_1  = new OCPIV2_1_1(this.common);
     private readonly ocpiv2_2_1:                      OCPIV2_2_1  = new OCPIV2_2_1(this.common);
     private readonly ocpiv2_3:                        OCPIV2_3    = new OCPIV2_3  (this.common);
+    private readonly ocpiv3_0:                        OCPIV3_0    = new OCPIV3_0  (this.common);
 
     private readonly baseDiv:                         HTMLDivElement;
 
@@ -254,20 +258,26 @@ export class OCPIExplorer {
                 const versionId = ocpiResponse.data.version as string;
 
                 if (versionId.startsWith("2.1"))
-                    this.ocpiv2_1_1.renderEndpoints(
+                    this.ocpiv2_1_1.RenderEndpoints(
                         ocpiResponse.data.endpoints as IOCPIv2_1_1.IEndpoint[],
                         this.versionDetailsHTMLDiv
                     );
 
                 else if (versionId.startsWith("2.2"))
-                    this.ocpiv2_2_1.renderEndpoints(
+                    this.ocpiv2_2_1.RenderEndpoints(
                         ocpiResponse.data.endpoints as IOCPIv2_2_1.IEndpoint[],
                         this.versionDetailsHTMLDiv
                     );
 
                 else if (versionId.startsWith("2.3"))
-                    this.ocpiv2_3.renderEndpoints(
+                    this.ocpiv2_3.RenderEndpoints(
                         ocpiResponse.data.endpoints as IOCPIv2_3.IEndpoint[],
+                        this.versionDetailsHTMLDiv
+                    );
+
+                else if (versionId.startsWith("3.0"))
+                    this.ocpiv3_0.RenderEndpoints(
+                        ocpiResponse.data.endpoints as IOCPIv3_0.IEndpoint[],
                         this.versionDetailsHTMLDiv
                     );
 

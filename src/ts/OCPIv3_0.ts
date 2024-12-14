@@ -16,9 +16,9 @@
  */
 
 import    { OCPI, SearchResultsMode }  from './OCPICommon';
-import * as IOCPIv2_3                  from './IOCPIv2_3';
+import * as IOCPIv3_0                  from './IOCPIv3_0';
 
-export class OCPIV2_3 {
+export class OCPIV3_0 {
 
     //#region Data
 
@@ -38,7 +38,7 @@ export class OCPIV2_3 {
 
     //#region RenderEndpoints(endpoints, container)
 
-    public RenderEndpoints(endpoints:  Array<IOCPIv2_3.IEndpoint>,
+    public RenderEndpoints(endpoints:  Array<IOCPIv3_0.IEndpoint>,
                            container:  HTMLDivElement): void {
 
         for (const endpoint of endpoints) {
@@ -131,8 +131,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ICDRMetadata,
-                               IOCPIv2_3.ICDR>(
+        this.common.OCPISearch<IOCPIv3_0.ICDRMetadata,
+                               IOCPIv3_0.ICDR>(
 
             CDRsURL,
             () => {
@@ -217,24 +217,24 @@ export class OCPIV2_3 {
 
                 let numberOfTariff = 1;
 
-                if (cdr.tariffs) {
-                    for (const tariff of cdr.tariffs) {
+                // if (cdr.tariffs) {
+                //     for (const tariff of cdr.tariffs) {
 
-                        const tariffDiv          = tariffsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        tariffDiv.className      = "tariff";
+                //         const tariffDiv          = tariffsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                //         tariffDiv.className      = "tariff";
 
-                        const numberDiv          = tariffDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        numberDiv.className      = "number";
-                        numberDiv.innerHTML      = (numberOfTariff++) + ".";
+                //         const numberDiv          = tariffDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                //         numberDiv.className      = "number";
+                //         numberDiv.innerHTML      = (numberOfTariff++) + ".";
 
-                        const tariffIdDiv        = tariffDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        tariffIdDiv.className    = "tariffId";
-                        tariffIdDiv.innerHTML    = tariff.id;
+                //         const tariffIdDiv        = tariffDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                //         tariffIdDiv.className    = "tariffId";
+                //         tariffIdDiv.innerHTML    = tariff.id;
 
-                        // ...
+                //         // ...
 
-                    }
-                }
+                //     }
+                // }
 
                 const chargingPeriodsDiv      = propertiesDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                 chargingPeriodsDiv.className  = "chargingPeriods";
@@ -294,14 +294,6 @@ export class OCPIV2_3 {
                     cdr.total_time.toString()
                 )
 
-                if (cdr.total_parking_time)
-                    this.common.CreateProperty(
-                        propertiesDiv,
-                        "totalParkingTime",
-                        "Total Parking Time",
-                        cdr.total_parking_time.toString()
-                    )
-
                 if (cdr.remark)
                     this.common.CreateProperty(
                         propertiesDiv,
@@ -360,8 +352,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ILocationMetadata,
-                               IOCPIv2_3.ILocation>(
+        this.common.OCPISearch<IOCPIv3_0.ILocationMetadata,
+                               IOCPIv3_0.ILocation>(
 
             LocationsURL,
             () => {
@@ -387,8 +379,6 @@ export class OCPIV2_3 {
                 locationTitleDiv.innerHTML    = location.name
                                                     ? location.name + " (" + location.id + ")"
                                                     : location.id;
-                                                // country_code
-                                                // party_id
 
                 const propertiesDiv           = locationAnchor.appendChild(document.createElement('div')) as HTMLDivElement;
                 propertiesDiv.className       = "properties";
@@ -434,19 +424,21 @@ export class OCPIV2_3 {
                         location.parking_type
                     )
 
-                this.common.CreateProperty(
-                    propertiesDiv,
-                    "address",
-                    "Address",
-                    location.address + ", " + location.postal_code + " " + location.city + ", " + location.country + (location.time_zone ? " (" + location.time_zone + ")" : "")
-                );
+                if (location.address)
+                    this.common.CreateProperty(
+                        propertiesDiv,
+                        "address",
+                        "Address",
+                        location.address.address + ", " + location.address.postal_code + " " + location.address.city + ", " + location.address.country + (location.time_zone ? " (" + location.time_zone + ")" : "")
+                    );
 
-                this.common.CreateProperty(
-                    propertiesDiv,
-                    "coordinates",
-                    "Lat/Lng",
-                    location.coordinates.latitude + ", " + location.coordinates.longitude
-                );
+                if (location.address)
+                    this.common.CreateProperty(
+                        propertiesDiv,
+                        "coordinates",
+                        "Lat/Lng",
+                        location.address.coordinates.latitude + ", " + location.address.coordinates.longitude
+                    );
 
                 // opening_times?
 
@@ -460,159 +452,156 @@ export class OCPIV2_3 {
 
                 // publish (PlugSurfing extension)
 
-                const evsesDiv        = locationAnchor.appendChild(document.createElement('a')) as HTMLAnchorElement;
-                evsesDiv.className    = "evses";
+                const stationsDiv  = locationAnchor.appendChild(document.createElement('a')) as HTMLAnchorElement;
+                stationsDiv.className    = "stations";
 
-                let numberOfEVSE = 1;
+                let numberOfStation = 1;
+                let numberOfEVSE    = 1;
 
-                if (location.evses) {
-                    for (const evse of location.evses) {
+                for (const station of location.charging_pool) {
 
-                        const evseDiv                = evsesDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        evseDiv.className            = "evse evseStatus_" + evse.status;
+                    const stationIdDiv              = stationsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                    stationIdDiv.className          = "stationId";
+                    stationIdDiv.innerHTML          = (numberOfStation++) + ". " + station.id +
+                                                        + (station.physical_reference ? " [" + station.physical_reference + "]" : "");
 
-                        const statusDiv              = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        statusDiv.className          = "evseStatus evseStatus_" + evse.status;
-                        statusDiv.innerHTML          = evse.status;
+                    const stationPropertiesDiv      = stationsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                    stationPropertiesDiv.className  = "properties";                                                
 
-                        const evesIdDiv              = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        evesIdDiv.className          = "evseId";
-                        evesIdDiv.innerHTML          = (numberOfEVSE++) + ". " + evse.uid + (evse.evse_id && evse.evse_id != evse.uid ? " (" + evse.evse_id + ")" : "")
-                                                           + (evse.physical_reference ? " [" + evse.physical_reference + "]" : "");
+                    if (station.floor_level)
+                        this.common.CreateProperty(
+                            stationPropertiesDiv,
+                            "floorLevel",
+                            "Floor Level",
+                            station.floor_level
+                        );
 
-                        const evsePropertiesDiv      = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        evsePropertiesDiv.className  = "properties";
+                    if (station.coordinates)
+                        this.common.CreateProperty(
+                            stationPropertiesDiv,
+                            "coordinates",
+                            "Lat/Lng",
+                            station.coordinates.latitude + ", " + station.coordinates.longitude
+                        );
 
-                        if (evse.floor_level)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "floorLevel",
-                                "Floor Level",
-                                evse.floor_level
-                            );
+                    if (station.capabilities)
+                        this.common.CreateProperty(
+                            stationPropertiesDiv,
+                            "capabilities",
+                            "Capabilities",
+                            station.capabilities.map(capability => capability).join(", ")
+                        );
 
-                        if (evse.coordinates)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "coordinates",
-                                "Lat/Lng",
-                                evse.coordinates.latitude + ", " + evse.coordinates.longitude
-                            );
+                    if (station.directions)
+                        this.common.CreateProperty(
+                            stationPropertiesDiv,
+                            "directions",
+                            "Directions",
+                            station.directions.map(direction => "(" + direction.language + ") " + direction.text).join("<br />")
+                        );
 
-                        if (evse.capabilities)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "capabilities",
-                                "Capabilities",
-                                evse.capabilities.map(capability => capability).join(", ")
-                            );
 
-                        if (evse.parking_restrictions)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "parkingRestrictions",
-                                "Parking Restrictions",
-                                evse.parking_restrictions.map(parkingRestriction => parkingRestriction).join(", ")
-                            );
+                    const evsesDiv          = stationsDiv.appendChild(document.createElement('a')) as HTMLAnchorElement;
+                    evsesDiv.className      = "evses";
 
-                        if (evse.images)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "images",
-                                "Images",
-                                evse.images.map(image => image).join("<br />")
-                            );
+                    if (station.evses) {
+                        for (const evse of station.evses) {
 
-                        if (evse.directions)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "directions",
-                                "Directions",
-                                evse.directions.map(direction => "(" + direction.language + ") " + direction.text).join("<br />")
-                            );
+                            const evseDiv                = evsesDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                            evseDiv.className            = "evse";
 
-                        if (evse.status_schedule)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "statusSchedule",
-                                "Status Schedule",
-                                evse.status_schedule.map(statusSchedule => statusSchedule.status + " (" + statusSchedule.period_begin + (statusSchedule.period_end ? " => " + statusSchedule.period_end : "") + ")").join("<br />")
-                            );
+                            const evesIdDiv              = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                            evesIdDiv.className          = "evseId";
+                            evesIdDiv.innerHTML          = (numberOfEVSE++) + ". " + evse.uid + (evse.evse_id && evse.evse_id != evse.uid ? " (" + evse.evse_id + ")" : "")
+                                                            + (evse.physical_reference ? " [" + evse.physical_reference + "]" : "");
 
-                        // energy_meter (OCC Calibration Law Extentions)
+                            const evsePropertiesDiv      = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                            evsePropertiesDiv.className  = "properties";
 
-                        const connectorsDiv     = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        connectorsDiv.className = "connectors";
+                            if (evse.images)
+                                this.common.CreateProperty(
+                                    evsePropertiesDiv,
+                                    "images",
+                                    "Images",
+                                    evse.images.map(image => image).join("<br />")
+                                );
 
-                        if (evse.connectors) {
-                            for (var connector of evse.connectors) {
+                            if (evse.status_schedule)
+                                this.common.CreateProperty(
+                                    evsePropertiesDiv,
+                                    "statusSchedule",
+                                    "Status Schedule",
+                                    evse.status_schedule.map(statusSchedule => statusSchedule.status + " (" + statusSchedule.period_begin + (statusSchedule.period_end ? " => " + statusSchedule.period_end : "") + ")").join("<br />")
+                                );
 
-                                const connectorDiv                = connectorsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                                connectorDiv.className            = "connector";
+                            // energy_meter (OCC Calibration Law Extentions)
 
-                                const connectorInfoDiv            = connectorDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                                connectorInfoDiv.className        = "connectorInfo";
-                                connectorInfoDiv.innerHTML        = connector.id + ". " + connector.standard + ", " + connector.format + ", " + connector.max_amperage + " A, " + connector.max_voltage + " V, " + connector.power_type;
+                            const connectorsDiv     = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                            connectorsDiv.className = "connectors";
 
-                                const connectorPropertiesDiv      = connectorDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                                connectorPropertiesDiv.className  = "properties";
+                            if (evse.connectors) {
+                                for (var connector of evse.connectors) {
 
-                                if (connector.tariff_ids)
-                                    this.common.CreateProperty(
-                                        connectorPropertiesDiv,
-                                        "tariffsInfo",
-                                        "Tariffs",
-                                        connector.tariff_ids.join(", ")
-                                    );
+                                    const connectorDiv                = connectorsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                                    connectorDiv.className            = "connector";
 
-                                if (connector.terms_and_conditions)
-                                    this.common.CreateProperty(
-                                        connectorPropertiesDiv,
-                                        "terms",
-                                        "Terms",
-                                        connector.terms_and_conditions
-                                    );
+                                    const connectorInfoDiv            = connectorDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                                    connectorInfoDiv.className        = "connectorInfo";
+                                    connectorInfoDiv.innerHTML        = connector.id + ". " + connector.standard + ", " + connector.format + ", " + connector.max_amperage + " A, " + connector.max_voltage + " V, " + connector.power_type;
 
-                                const datesDiv      = connectorDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                                datesDiv.className  = "dates properties";
+                                    const connectorPropertiesDiv      = connectorDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                                    connectorPropertiesDiv.className  = "properties";
 
-                                if (connector.created)
+                                    if (connector.terms_and_conditions)
+                                        this.common.CreateProperty(
+                                            connectorPropertiesDiv,
+                                            "terms",
+                                            "Terms",
+                                            connector.terms_and_conditions
+                                        );
+
+                                    const datesDiv      = connectorDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                                    datesDiv.className  = "dates properties";
+
+                                    if (connector.created)
+                                        this.common.CreateProperty(
+                                            datesDiv,
+                                            "created",
+                                            "Created:",
+                                            connector.created
+                                        )
+
                                     this.common.CreateProperty(
                                         datesDiv,
-                                        "created",
-                                        "Created:",
-                                        connector.created
+                                        "lastUpdated",
+                                        "Last updated:",
+                                        connector.last_updated
                                     )
 
+                                }
+                            }
+
+                            const datesDiv      = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
+                            datesDiv.className  = "dates properties";
+
+                            if (evse.created)
                                 this.common.CreateProperty(
                                     datesDiv,
-                                    "lastUpdated",
-                                    "Last updated:",
-                                    connector.last_updated
+                                    "created",
+                                    "Created:",
+                                    evse.created
                                 )
 
-                            }
-                        }
-
-                        const datesDiv      = evseDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                        datesDiv.className  = "dates properties";
-
-                        if (evse.created)
                             this.common.CreateProperty(
                                 datesDiv,
-                                "created",
-                                "Created:",
-                                evse.created
+                                "lastUpdated",
+                                "Last updated:",
+                                evse.last_updated
                             )
 
-                        this.common.CreateProperty(
-                            datesDiv,
-                            "lastUpdated",
-                            "Last updated:",
-                            evse.last_updated
-                        )
-
+                        }
                     }
+
                 }
 
                 const datesDiv      = locationAnchor.appendChild(document.createElement('div')) as HTMLDivElement;
@@ -665,8 +654,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ISessionMetadata,
-                               IOCPIv2_3.ISession>(
+        this.common.OCPISearch<IOCPIv3_0.ISessionMetadata,
+                               IOCPIv3_0.ISession>(
 
             SessionsURL,
             () => {
@@ -698,23 +687,23 @@ export class OCPIV2_3 {
                     propertiesDiv,
                     "start",
                     "Start",
-                    session.start_datetime
+                    session.start_date_time
                 )
 
-                if (session.end_datetime) {
+                if (session.end_date_time) {
                     this.common.CreateProperty(
                         propertiesDiv,
                         "end",
                         "end",
-                        session.end_datetime
+                        session.end_date_time
                     )
                 }
 
                 this.common.CreateProperty(
                     propertiesDiv,
-                    "kWh",
-                    "kWh",
-                    session.kwh.toString()
+                    "energy",
+                    "Energy",
+                    session.energy.toString()
                 )
 
                 if (session.authorization_reference)
@@ -843,8 +832,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ITariffMetadata,
-                               IOCPIv2_3.ITariff>(
+        this.common.OCPISearch<IOCPIv3_0.ITariffMetadata,
+                               IOCPIv3_0.ITariff>(
 
             TariffsURL,
             () => {
@@ -919,21 +908,13 @@ export class OCPIV2_3 {
                         priceComponentPriceDiv.className     = "price";
                         priceComponentPriceDiv.innerHTML     = priceComponent.price.toString() + " " + tariff.currency;
 
-                        if (priceComponent.type !== "FLAT") {
-                            const priceComponentStepSizeDiv = priceComponentDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            priceComponentStepSizeDiv.className = "stepSize";
-                            priceComponentStepSizeDiv.innerHTML = priceComponent.step_size.toString();
-                        }
-
                     }
 
 
                     if (tariffElement.restrictions?.start_time   ||
                         tariffElement.restrictions?.end_time     ||
-                        tariffElement.restrictions?.start_date   ||
-                        tariffElement.restrictions?.end_date     ||
-                        tariffElement.restrictions?.min_kwh      ||
-                        tariffElement.restrictions?.max_kwh      ||
+                        tariffElement.restrictions?.min_energy   ||
+                        tariffElement.restrictions?.max_energy   ||
                         tariffElement.restrictions?.min_power    ||
                         tariffElement.restrictions?.max_power    ||
                         tariffElement.restrictions?.min_duration ||
@@ -978,63 +959,33 @@ export class OCPIV2_3 {
 
                         }
 
-                        if (tariffElement.restrictions?.start_date) {
+                        if (tariffElement.restrictions?.min_energy) {
 
                             const restrictionDiv           = restrictionsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                             restrictionDiv.className       = "restriction";
 
                             const restrictionKeyDiv        = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                             restrictionKeyDiv.className    = "key";
-                            restrictionKeyDiv.innerHTML    = "Start Date";
+                            restrictionKeyDiv.innerHTML    = "min energy (kWh)";
 
                             const restrictionValueDiv      = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                             restrictionValueDiv.className  = "value";
-                            restrictionValueDiv.innerHTML  =  tariffElement.restrictions.start_date;
+                            restrictionValueDiv.innerHTML  =  tariffElement.restrictions.min_energy.toString();
 
                         }
 
-                        if (tariffElement.restrictions?.end_date) {
+                        if (tariffElement.restrictions?.max_energy) {
 
                             const restrictionDiv           = restrictionsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                             restrictionDiv.className       = "restriction";
 
                             const restrictionKeyDiv        = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                             restrictionKeyDiv.className    = "key";
-                            restrictionKeyDiv.innerHTML    = "End Date";
+                            restrictionKeyDiv.innerHTML    = "max energy (kWh)";
 
                             const restrictionValueDiv      = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
                             restrictionValueDiv.className  = "value";
-                            restrictionValueDiv.innerHTML  =  tariffElement.restrictions.end_date;
-
-                        }
-
-                        if (tariffElement.restrictions?.min_kwh) {
-
-                            const restrictionDiv           = restrictionsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            restrictionDiv.className       = "restriction";
-
-                            const restrictionKeyDiv        = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            restrictionKeyDiv.className    = "key";
-                            restrictionKeyDiv.innerHTML    = "min kWh";
-
-                            const restrictionValueDiv      = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            restrictionValueDiv.className  = "value";
-                            restrictionValueDiv.innerHTML  =  tariffElement.restrictions.min_kwh.toString();
-
-                        }
-
-                        if (tariffElement.restrictions?.max_kwh) {
-
-                            const restrictionDiv           = restrictionsDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            restrictionDiv.className       = "restriction";
-
-                            const restrictionKeyDiv        = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            restrictionKeyDiv.className    = "key";
-                            restrictionKeyDiv.innerHTML    = "max kWh";
-
-                            const restrictionValueDiv      = restrictionDiv.appendChild(document.createElement('div')) as HTMLDivElement;
-                            restrictionValueDiv.className  = "value";
-                            restrictionValueDiv.innerHTML  =  tariffElement.restrictions.max_kwh.toString();
+                            restrictionValueDiv.innerHTML  =  tariffElement.restrictions.max_energy.toString();
 
                         }
 
@@ -1170,8 +1121,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ITokenMetadata,
-                               IOCPIv2_3.IToken>(
+        this.common.OCPISearch<IOCPIv3_0.ITokenMetadata,
+                               IOCPIv3_0.IToken>(
 
             TokensURL,
             () => {
@@ -1231,10 +1182,18 @@ export class OCPIV2_3 {
 
                 this.common.CreateProperty(
                     propertiesDiv,
-                    "isValid",
-                    "Is Valid",
-                    token.valid ? "valid" : "invalid"
+                    "validFrom",
+                    "Valid From",
+                    token.valid_from
                 )
+
+                if (token.valid_until)
+                    this.common.CreateProperty(
+                        propertiesDiv,
+                        "validUntil",
+                        "Valid Until",
+                        token.valid_until
+                    )
 
                 this.common.CreateProperty(
                     propertiesDiv,

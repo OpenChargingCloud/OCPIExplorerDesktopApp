@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2024 GraphDefined GmbH <achim.friedland@graphdefined.com>
- * This file is part of OCPIExplorer <https://github.com/OpenChargingCloud/OCPIExplorer>
+ * This file is part of OCPIExplorer <https://github.com/OpenChargingCloud/OCPIExplorerDesktopApp>
  *
  * Licensed under the Affero GPL license, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
  */
 
 export interface TMetadataDefaults {
-    totalCount:    number;
-    filteredCount: number;
+    totalCount:                     number;
+    filteredCount:                  number;
 }
 
 
 export interface IOCPIResponse {
-    data:                            any;
-    status_code:                     number;
-    status_message?:                 string;
-    timestamp:                       Date;
+    data:                           any;
+    status_code:                    number;
+    status_message?:                string;
+    timestamp:                      Date;
 }
 
 export type VersionNumber =
@@ -55,13 +55,13 @@ export type InterfaceRole =
     "RECEIVER";
 
 export interface IVersion {
-    version:                         VersionNumber;                 // The version number.
-    url:                             string;                        // URL to the endpoint containing version specific information.
+    version:                        VersionNumber;                  // The version number.
+    url:                            string;                         // URL to the endpoint containing version specific information.
 }
 
 export interface IVersionDetail {
-    version:                         VersionNumber;                 // The version number.
-    endpoints:                       Array<IEndpoint>;              // A list of supported endpoints for this version.
+    version:                        VersionNumber;                  // The version number.
+    endpoints:                      Array<IEndpoint>;               // A list of supported endpoints for this version.
 }
 
 export interface IEndpoint {
