@@ -42,11 +42,330 @@ html {
             .screen {
 
                 display:                none;
+                flex-direction:         column;
                 width:                  100vw;
                 height:                 100vh;
 
                 .top {
-                    flex-grow: 1;
+
+                    flex-grow:              1;
+
+                    #search {
+
+                        #controls {
+
+                            padding:            30px 0 5px 0;
+
+                            #search {
+
+                                display:            flex;
+
+                                .patternFilter {
+
+                                    font-size:          9pt;
+
+                                    .patternFilterBar {
+
+                                        width:              30vw;
+                                        /*margin-left:        auto;
+                                        margin-right:       0;*/
+                                        position:           relative;
+                                        border:             1px solid;
+                                        border-radius:      4px;
+
+                                        #patternFilterInput {
+
+                                            padding:            5px 6px 4px 23px;
+                                            width:              calc(100% - 29px);
+                                            border:             0;
+                                            border-radius:      4px;
+                                            outline:            none;
+
+                                            &::placeholder {
+                                                color:              darkgreen;
+                                            }
+
+                                            &:focus {
+                                                color:              #436ba8;
+                                                background-color:   #dae9ff;
+                                            }
+
+                                        }
+
+                                        #sign {
+                                            position:           absolute;
+                                            top:                6px;
+                                            right:              calc(100% - 18px);
+                                            font-size:          10pt;
+                                            color:              #AAAAAA;
+                                        }
+
+                                        &:focus-within {
+                                            border:             1px solid #aeb2c7;
+                                            #sign {
+                                                color:              red;
+                                            }
+                                        }
+
+                                    }
+
+                                }
+
+                                .take {
+
+                                    padding-left:       10px;
+
+                                    select {
+
+                                        border:             0;
+                                        padding:            5px 6px;
+                                        outline:            0;
+                                        background-color:   #efefff;
+                                        border-radius:      4px;
+
+                                        option {
+                                            padding:            2px 3px;
+                                        }
+
+                                    }
+
+                                    select:focus {
+                                        background-color:   #afafff;
+                                    }
+
+                                }
+
+                                .searchButtons {
+
+                                    padding-left:       10px;
+
+                                    button {
+                                        border:             0;
+                                        background-color:   #e4e4e4;
+                                        border-radius:      50%;
+                                        outline:            none;
+                                        width:              28px;
+                                        height:             28px;
+                                        font-size:          80%;
+                                        color:              black;
+                                        margin:             0px 2px;
+                                    }
+
+                                    button[disabled] {
+                                        background:         none;
+                                        cursor:             not-allowed;
+                                    }
+
+                                    button[disabled]:hover {
+                                        background:         none;
+                                        cursor:             not-allowed;
+                                    }
+
+                                    button[disabled].busy {
+                                        background-color:   #e4e4e4;
+                                        color:              black;
+                                    }
+
+                                    button[disabled].busyActive {
+                                        background-color:   #ffab66;
+                                    }
+
+                                    button.busy {
+                                        background-color:   #e4e4e4;
+                                        color:              black;
+                                    }
+
+                                    button:hover {
+                                        background-color:   #ffd5b2;
+                                    }
+
+                                    button:focus {
+                                        background-color:   #ffefef;
+                                    }
+
+
+                                    #searchButton {
+                                        display:            inline-block;
+                                    }
+
+                                    #leftButton {
+                                        display:            inline-block;
+                                    }
+
+                                    #rightButton {
+                                        display:            inline-block;
+                                    }
+
+                                }
+
+                                .dateFilters {
+
+                                    padding-left:       10px;
+                                    margin:             5px 0px 0px 30px;
+
+                                    #dateFrom {
+                                        display:            inline-block;
+                                    }
+
+                                    #dateTo {
+                                        display:            inline-block;
+                                        margin-left:        20px;
+                                    }
+
+                                    label {
+                                        font-size:          80%;
+                                    }
+
+                                    .datepicker {
+
+                                        display:            inline-block;
+                                        position:           relative;
+
+                                        input {
+                                            background-color:   #e8e8e8;
+                                            padding:            4px 23px 4px 6px;
+                                            border:             0;
+                                            border-radius:      4px;
+                                            outline:            none;
+                                        }
+
+                                        input:focus {
+                                            color:              #ff7300;
+                                            background-color:   #777;
+                                        }
+
+                                        i {
+                                            font-size:          83%;
+                                            position:           absolute;
+                                            right:              5px;
+                                            top:                5px;
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                        #message {
+                            padding:            5px 30px;
+                            font-size:          80%;
+                            color:              #707070;
+                        }
+
+                        #localSearchMessage {
+                            display:            none;
+                            padding:            5px 30px;
+                            font-size:          80%;
+                            color:              #707070;
+                        }
+
+                        .searchResults {
+                            display:                        flex;
+                            flex-direction:                 column;
+                        }
+
+                        .searchResults .searchResult:first-child {
+                            border-top-left-radius:         6px;
+                            border-top-right-radius:        6px;
+                        }
+
+                        .searchResults .searchResult:last-child {
+                            border-bottom-left-radius:      6px;
+                            border-bottom-right-radius:     6px;
+                        }
+
+                    }
+
+                    #lowerButtons {
+
+                        display:            flex;
+                        flex-direction:     row;
+                        margin:             1vh 1vw;
+
+   /*                     button {
+                            border:             0;
+                            white-space:        nowrap;
+                            color:              #6b6b6b;
+                            padding:            8px 14px;
+                            margin:             10px 0 15px 0;
+                            border-radius:      5px;
+                            font-size:          70%;
+                            text-decoration:    none;
+                        }*/
+
+                        /* Also used for 'a'-tags which should behave like a button! */
+
+                        .button {
+
+                            background:                 #ffba83;
+                            background-image:           linear-gradient(to bottom, #ffc99e, #ffba83);
+                            color:                      #b36630;
+                            padding:                    10px 20px;
+                            margin-left:                5px;
+                            border-radius:              4px;
+                            border:                     0px;
+                            box-shadow:                 2px 2px 6px #999;
+                            font-size:                  70%;
+                            white-space:                nowrap;
+                            text-decoration:            none;
+
+                            .text {
+
+                                display:            inline-block;
+
+                                .text2 {
+                                    display:            inline-block;
+                                    padding-left:       8px;
+                                    vertical-align:     top;
+                                    padding-top:        7px;
+                                }
+
+                            }
+
+                        }
+
+                     /*   button:hover {
+                            background-color:   #fdcca4;
+                        }*/
+
+                        .button:hover {
+                            background-color:           #fbd1af;
+                            background-image:           linear-gradient(to bottom, #ffe5d1, #fbd1af);
+                            color:                      #cb8f64;
+                        }
+
+/*                        button i:first-child {
+                            margin-right:       2px;
+                            font-size:          75%;
+                        }*/
+
+
+
+                        .button:active {
+                            box-shadow:                 0 1px 2px #999;
+                            transform:                  translateY(4px);
+                        }
+
+                        .button:focus {
+                            outline:                    0px;
+                        }
+
+                        .button:disabled {
+                            background-color:           rgb(238, 226, 215);
+                            background-image:           none;
+                            color:                      #ceb9aa;
+                            box-shadow:                 none;
+                        }
+
+                    }
+
+                    #saveButton {
+                        margin-top:                 40px;
+                    }
+
                 }
 
                 .bottom {
@@ -98,32 +417,73 @@ html {
             #connectScreen {
 
                 display:                flex;
-                flex-direction:         column;
                 align-items:            center;
                 justify-content:        center;
 
-                #ocpiEndpoint {
+                #dropArea {
 
-                    display:                flex;
-                    flex-direction:         row;
-                    gap:                    4px;
-                    padding:                20px 35px;
-                    border-radius:          10px;
-                    user-select:            none;
+                    display:                grid;
+                    place-items:            center;
 
-                    #inputs {
+                    #ocpiEndpoint {
 
+                        grid-area:              1 / 1 / 2 / 2;
                         display:                flex;
-                        flex-direction:         column;
-                        gap:                    2px;
+                        flex-direction:         row;
+                        gap:                    4px;
+                        border-radius:          10px;
+                        user-select:            none;
 
-                        input[type="text"], input[type="url"] {
+                        &:hover {
+                            background-color:       $backgroundColor;
+                        }
 
-                            padding:                6px 8px;
-                            width:                  40vw;
+                        #inputs {
+
+                            display:                flex;
+                            flex-direction:         column;
+                            gap:                    2px;
+
+                            input[type="text"], input[type="url"] {
+
+                                padding:                6px 8px;
+                                width:                  40vw;
+                                border:                 0;
+                                border-radius:          4px;
+                                background-color:       $inputBackgroundColor;
+
+                                &:hover {
+                                    background-color:       $hoverColor;
+                                }
+
+                            }
+
+                            #accessTokenEncoding {
+
+                                display:                flex;
+                                align-self:             end;
+                                padding-right:          8px;
+
+                                input[type="checkbox"] {
+                                    margin-right:           5px;
+                                }
+
+                                label {
+                                    font-size:              70%;
+                                    padding-top:            3.5px;
+                                }
+
+                            }
+
+
+                        }
+
+                        button {
+
+                            padding:                6px 14px;
                             border:                 0;
-                            border-radius:          4px;
-                            background-color:       $inputBackgroundColor;
+                            border-radius:          6px;
+                            background-color:       $buttonBackgroundColor;
 
                             &:hover {
                                 background-color:       $hoverColor;
@@ -131,37 +491,87 @@ html {
 
                         }
 
-                        #accessTokenEncoding {
+                    }
 
-                            display:                flex;
-                            align-self:             end;
-                            padding-right:          8px;
+                    #connectionSettingsDropArea {
 
-                            input[type="checkbox"] {
-                                margin-right:           5px;
-                            }
+                        grid-area:              1 / 1 / 2 / 2;
+                        visibility:             hidden;
+                        background-color:       #bcbce6;
+                        width:                  100%;
+                        height:                 100%;
+                        display:                flex;
+                        align-items:            center;
+                        justify-content:        center;
+                        border:                 2px dashed transparent;
+                        border-radius:          10px;
+                        user-select:            none;
 
-                            label {
-                                font-size:              70%;
-                                padding-top:            3.5px;
-                            }
-
+                        .text {
+                            display:                inline-block;
+                            margin-left:            6px;
                         }
 
+                        &.active {
+                            visibility:             visible;
+                            color:                  #000000;
+                            background-color:       #9999ff;;
+                            border-color:           #000000;
+                        }
+
+                        &.error {
+                            visibility:             visible;
+                            color:                  #FF0000;
+                            background-color:       #e4a6a6;
+                        }
 
                     }
 
-                    button {
+                }
 
-                        padding:                6px 14px;
-                        border:                 0;
-                        border-radius:          6px;
-                        background-color:       $buttonBackgroundColor;
+                #fileDropArea {
 
-                        &:hover {
-                            background-color:       $hoverColor;
+                    display:                flex;
+                    padding:                12px 75px;
+                    color:                  #BBBBBB;
+                    background-color:       #F3F3F3;
+                    border-radius:          10px;
+                    margin-top:             1vh;
+                    border:                 2px dashed transparent;
+                    user-select:            none;
+
+                    .text {
+
+                        //display:                inline-block;
+                        margin-left:            6px;
+
+                        button {
+
+                            border:                 0;
+                            background:             none;
+                            font-size:              100%;
+                            margin:                 0;
+                            padding:                0;
+                            font-style:             italic;
+                            color:                #a0a0a0;
+
+                            &:hover {
+                                color:                  #4c4cc0;
+                            }
+
                         }
 
+                    }
+
+                    &.active {
+                        color:                  #000000;
+                        background-color:       #9999ff;;
+                        border-color:           #000000;
+                    }
+
+                    &.error {
+                        color:                  #FF0000;
+                        background-color:       #e4a6a6;
                     }
 
                 }
@@ -268,6 +678,14 @@ html {
 
                 }
 
+            }
+
+
+            #locationsScreen {
+                .top {
+                    display:                flex;
+                    justify-content:        center;
+                }
             }
 
         }
