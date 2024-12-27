@@ -225,12 +225,12 @@ export type Capability =
      string;
 
 export type LocationService =
-    "ACCESSIBLE_CHARGING" |                                         // One or more EVSEs have accessibility modifications in place to allow use by people with disabilities. Note that more information on accessibility modifications can be provided
-                                                                    // using the various fields for images and in the parking field of the EVSE object.
-    "ASSISTANCE" |                                                  // Assistance from on-site staff is available to help a Driver charge at the Location.
-    "CAMERA_SURVEILLANCE" |                                         // Security monitoring with video cameras is in place at the Location.
-    "EMERGENCY_CALL" |                                              // A voice communication channel is available for the Driver to contact security staff from the Location.
-    "WIFI WLAN" |                                                   // Internet connectivity is available at the Location.
+    "ACCESSIBLE_CHARGING" |                                         // One or more EVSEs have accessibility modifications in place to allow use by people with disabilities.
+                                                                    // Note that more information on accessibility modifications can be provided using the various fields for images and in the parking field of the EVSE object.
+    "ASSISTANCE"          |                                         // Assistance from on-site staff is available to help a Driver charge at the location.
+    "CAMERA_SURVEILLANCE" |                                         // Security monitoring with video cameras is in place at the location.
+    "EMERGENCY_CALL"      |                                         // A voice communication channel is available for the Driver to contact security staff from the location.
+    "WIFI"                |                                         // WLAN Internet connectivity is available at the location.
      string;
 
 export type ConnectorFormat =
@@ -340,7 +340,15 @@ export type ParkingType =
     "UNDERGROUND_GARAGE" |                                          // Multistorey car park, mainly underground.
      string;
 
-export type ParkingRestriction =
+export interface ParkingRestriction {
+    group:                          Array<ParkingRestrictionGroup>; // One or more groups that drivers have to be in to be allowed to park here.
+    applies_outside_opening_hours:  boolean;                        // Whether the restriction applies also outside opening hours of the establishment that
+                                                                    // the Location belongs to. This field can be used for example to create a ParkingRestriction
+                                                                    // that signals that a certain EVSE is for employees only during opening hours, but can be
+                                                                    // used by everyone outside those opening hours.
+}
+
+export type ParkingRestrictionGroup =
     "EMPLOYEES"   |                                                 // Parking only for people who work at a site, building, or complex that the Location belongs to.
     "EV_ONLY"     |                                                 // Reserved parking spot for electric vehicles.
     "PLUGGED"     |                                                 // Parking is only allowed while plugged in (charging).
