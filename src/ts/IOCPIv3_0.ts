@@ -234,12 +234,12 @@ export type Capability =
      string;
 
 export type LocationService =
-    "ACCESSIBLE_CHARGING" |                                         // One or more EVSEs have accessibility modifications in place to allow use by people with disabilities. Note that more information on accessibility modifications can be provided
-                                                                    // using the various fields for images and in the parking field of the EVSE object.
-    "ASSISTANCE" |                                                  // Assistance from on-site staff is available to help a Driver charge at the Location.
-    "CAMERA_SURVEILLANCE" |                                         // Security monitoring with video cameras is in place at the Location.
-    "EMERGENCY_CALL" |                                              // A voice communication channel is available for the Driver to contact security staff from the Location.
-    "WIFI WLAN" |                                                   // Internet connectivity is available at the Location.
+    "ACCESSIBLE_CHARGING" |                                         // One or more EVSEs have accessibility modifications in place to allow use by people with disabilities.
+                                                                    // Note that more information on accessibility modifications can be provided using the various fields for images and in the parking field of the EVSE object.
+    "ASSISTANCE"          |                                         // Assistance from on-site staff is available to help a Driver charge at the location.
+    "CAMERA_SURVEILLANCE" |                                         // Security monitoring with video cameras is in place at the location.
+    "EMERGENCY_CALL"      |                                         // A voice communication channel is available for the Driver to contact security staff from the location.
+    "WIFI"                |                                         // WLAN Internet connectivity is available at the location.
      string;
 
 export type ConnectorFormat =
@@ -349,7 +349,15 @@ export type ParkingType =
     "UNDERGROUND_GARAGE" |                                          // Multistorey car park, mainly underground.
      string;
 
-export type ParkingRestriction =
+export interface ParkingRestriction {
+    group:                          Array<ParkingRestrictionGroup>; // One or more groups that drivers have to be in to be allowed to park here.
+    applies_outside_opening_hours:  boolean;                        // Whether the restriction applies also outside opening hours of the establishment that
+                                                                    // the Location belongs to. This field can be used for example to create a ParkingRestriction
+                                                                    // that signals that a certain EVSE is for employees only during opening hours, but can be
+                                                                    // used by everyone outside those opening hours.
+}
+
+export type ParkingRestrictionGroup =
     "EMPLOYEES"   |                                                 // Parking only for people who work at a site, building, or complex that the Location belongs to.
     "EV_ONLY"     |                                                 // Reserved parking spot for electric vehicles.
     "PLUGGED"     |                                                 // Parking is only allowed while plugged in (charging).
@@ -423,6 +431,17 @@ export interface IEVSE extends IPartyIssuedObjectReference {
     last_updated:                   string;                         // Timestamp when this EVSE or one of its connectors was last updated (or created).
 }
 
+export interface IEVSEStatus extends IPartyIssuedObjectReference {
+    status:                         Status;                         // The current status of the EVSE.
+    timestamp?:                     string;                         // The optional timestamp of the status update.
+}
+
+export interface IStatusSchedule {
+    period_begin:                   string;                         // Begin of the scheduled period.
+    period_end?:                    string;                         // End of the scheduled period, if known.
+    status:                         Status;                         // Status value during the scheduled period.
+}
+
 export interface IConnector {
     id:                             string;                         // Identifier of the Connector within the EVSE. Two Connectors may have the same id as long as they do not belong to the same EVSE object.
     standard:                       ConnectorType;                  // The standard of the installed connector.
@@ -440,13 +459,47 @@ export interface IConnector {
 
 export interface IParking {
     vehicle_types:                  Array<VehicleType>;             // The vehicle types that the EVSE is intended for and that the associated parking is designed to accomodate.
+    max_vehicle_weight?:            number;                         // The maximum vehicle weight that can park at the EVSE, in kilograms. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    max_vehicle_height?:            number;                         // The maximum vehicle height that can park at the EVSE, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    max_vehicle_length?:            number;                         // The maximum vehicle length that can park at the EVSE, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    max_vehicle_width?:             number;                         // The maximum vehicle width that can park at the EVSE, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    parking_bay_length?:            number;                         // The length of the parking bay, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    parking_bay_width?:             number;                         // The width of the parking bay, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    dangerous_goods_allowed?:       boolean;                        // Whether vehicles loaded with dangerous substances are allowed to park at the EVSE. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    evse_position:                  EVSEPosition;                   // The position of the EVSE relative to the parking space.
+    direction:                      ParkingDirection;               // The direction in which the vehicle is to be parked next to this EVSE.
+    restricted_to_type:             boolean;                        // Whether it is forbidden for vehicles of a type not listed in vehicle_types to park at this EVSE, even if they can physically park there safely.
+    parking_restrictions?:          Array<ParkingRestriction>;      // All applicable restrictions on who can park at this EVSE, apart from those related to the vehicle type.
+    reservation_required:           boolean;                        // Whether a reservation is required for parking at the EVSE.
+    time_limit?:                    number;                         // A time limit. If this field is present, vehicles may not park in this parking longer than this number of minutes.
+    roofed?:                        boolean;                        // Whether the vehicle will be parked under a roof while charging.
+    images?:                        Array<IImage>;                  // Photos of the parking space at the EVSE. At least one photograph should be provided if the value of vehicle_types includes the DISABLED vehicle type.
+    lighting?:                      boolean;                        // Whether the parking space for the EVSE is lit by artificial lighting.
+    standards?:                     Array<string>                   // A list of standards that the parking space conforms to, e.g. PAS 1899 for parking for people with disabilities
 }
 
-export interface IStatusSchedule {
-    period_begin:                   string;                         // Begin of the scheduled period.
-    period_end?:                    string;                         // End of the scheduled period, if known.
-    status:                         Status;                         // Status value during the scheduled period.
-}
+export type EVSEPosition =
+    "LEFT"   |                                                      // The EVSE is to the left of the vehicle.
+                                                                    // For streetside parking, the CPO can assume the vehicle is facing the same way as traffic
+                                                                    // on the side of the road that the EVSE is on. This means that LEFT is used for all streetside
+                                                                    // parking in locales with left-hand traffic.
+                                                                    // For parking bays leading sideways from a roadway, the CPO can assume the vehicle is
+                                                                    // parking with the nose away from the roadway (that is, entering the parking bay driving forward).
+    "RIGHT"  |                                                      // The EVSE is to the right of the vehicle when parked.
+                                                                    // For streetside parking, the CPO can assume the vehicle is facing the same way as traffic
+                                                                    // on the side of the road that the EVSE is on. This means that RIGHT is used for all
+                                                                    // streetside parking in locales with right-hand traffic.
+                                                                    // For parking bays leading sideways from a roadway, the CPO can assume the vehicle is
+                                                                    // parking with the nose away from the roadway (that is, entering the parking bay driving forward).
+    "CENTER" |                                                      // The EVSE is at the center of the impassable narrow end of a parking bay
+     string;
+
+export type ParkingDirection =
+    "PARALLEL"      |                                               // Parking happens parallel to the roadway on which vehicles approach the EVSE.
+    "PERPENDICULAR" |                                               // Parking happens perpendicular to the roadway on which vehicles approach the EVSE.
+    "ANGLE"         |                                               // Parking happens at an angle to the roadway on which vehicles approach the EVSE (i.e. echelon parking).
+    "DRIVE_THROUGH" |                                               // A vehicle can stop, charge, and proceed without reversing into or out of a parking bay
+     string;
 
 export type PresenceStatus =
     "PRESENT" |                                                     // The EVSE is currently present and whether it is currently usable can be indicated using the EVSE Status module.
