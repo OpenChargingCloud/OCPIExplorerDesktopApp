@@ -40,6 +40,9 @@ export type VersionNumber =
      string;
 
 
+export type PartyId =
+     string;
+
 export type ModuleId =
     "cdrs"               |
     "chargingprofiles"   |
@@ -78,6 +81,12 @@ export interface IEndpoint {
 
 export interface IPartyIssuedObjectReference {
     id:                             string;                         // An identifier that uniquely identifies this Party Issued Object among other objects issued for the same module by the same party.
+}
+
+export interface PartyIssuedObjectUpdate extends IPartyIssuedObjectReference {
+    issuer_party:                   PartyId;                        // The party ID of the party that issued this object.
+    version:                        number;                         // The version of the Party Issued Object that is in the payload field.
+    payload:                        any;                            // The representation of the Party Issued Object at the version given in the version field.
 }
 
 export interface IRegularHours {
