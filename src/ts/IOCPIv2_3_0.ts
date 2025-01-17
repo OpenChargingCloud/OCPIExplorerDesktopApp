@@ -105,6 +105,7 @@ export interface ILocation {
     related_locations?:             Array<IAdditionalGeoLocation>;  // Geographical location of related points relevant to the user. For example, a location of a restaurant nearby.
     parking_type?:                  ParkingType;                    // The general type of parking at the charge point location.
     evses?:                         Array<IEVSE>;                   // List of EVSEs that belong to this Location.
+    parking_places?:                Array<IParking>;                // List of parking places that can be used by vehicles charging at this Location.
     directions?:                    Array<IDisplayText>;            // Human-readable directions on how to reach the location.
     operator?:                      IBusinessDetails;               // Information of the operator. When not specified, the information retrieved from the Credentials module, selected by the country_code and party_id of this Location, should be used instead.
     suboperator?:                   IBusinessDetails;               // Information of the suboperator if available.
@@ -122,6 +123,44 @@ export interface ILocation {
 export interface ILocationMetadata extends TMetadataDefaults {
 
 }
+
+export interface IParking {
+    id:                             string;                         // The identifier for this parking space.
+    physical_reference?:            string;                         // A string identifier for the parking place that is physically visible on-site to drivers using the parking space. This could be a short identifier painted on the surface of a parking place in a parking garage for example.
+    vehicle_types:                  Array<VehicleType>;             // The vehicle types that the parking is designed to accommodate.
+    max_vehicle_weight?:            number;                         // The maximum vehicle weight that can park at the EVSE, in kilograms. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    max_vehicle_height?:            number;                         // The maximum vehicle height that can park at the EVSE, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    max_vehicle_length?:            number;                         // The maximum vehicle length that can park at the EVSE, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    max_vehicle_width?:             number;                         // The maximum vehicle width that can park at the EVSE, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    parking_space_length?:          number;                         // The length of the parking space, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    parking_space_width?:           number;                         // The width of the parking space, in centimeters. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    dangerous_goods_allowed?:       boolean;                        // Whether vehicles loaded with dangerous substances are allowed to park at the EVSE. A value for this field should be provided unless the value of the vehicle_types field contains no values other than PERSONAL_VEHICLE or MOTORCYCLE.
+    evse_position?:                 EVSEPosition;                   // The position of the EVSE relative to the parking space.
+    direction?:                     ParkingDirection;               // The direction in which the vehicle is to be parked next to this EVSE.
+    drive_through?:                 boolean;                        // Whether a vehicle can stop, charge, and proceed without reversing into or out of a parking space. This should only be set to true if driving through is possible for all vehicle types listed in the vehicle_types field.
+    restricted_to_type:             boolean;                        // Whether it is forbidden for vehicles of a type not listed in vehicle_types to park at this EVSE, even if they can physically park there safely.
+    parking_restrictions?:          Array<ParkingRestriction>;      // All applicable restrictions on who can park at this EVSE, apart from those related to the vehicle type.
+    reservation_required:           boolean;                        // Whether a reservation is required for parking at the EVSE.
+    time_limit?:                    number;                         // A time limit. If this field is present, vehicles may not park in this parking longer than this number of minutes.
+    roofed?:                        boolean;                        // Whether the vehicle will be parked under a roof while charging.
+    images?:                        Array<IImage>;                  // Photos of the parking space at the EVSE. At least one photograph should be provided if the value of vehicle_types includes the DISABLED vehicle type.
+    lighting?:                      boolean;                        // Whether the parking space for the EVSE is lit by artificial lighting.
+    refrigeration_outlet?:          boolean;                        // Whether a power outlet is available to power a transport truck’s load refrigeration while the vehicle is parked.
+    standards?:                     Array<string>;                  // A list of standards that the parking space conforms to, e.g. PAS 1899 for parking for people with disabilities.  
+    apds_reference?:                string;                         // Reference to an Alliance for Parking Data Standards (APDS) element describing this parking. The referenced element may be a Place, Space or other hierarchy element defined by APDS.
+}
+
+export type EVSEPosition =
+    "LEFT"   |                                                      // The EVSE is to the left of the vehicle. For streetside parking, the CPO can assume the vehicle is facing the same way as traffic on the side of the road that the EVSE is on. This means that LEFT is used for all streetside parking in locales with left-hand traffic. For parking spaces leading sideways from a roadway, the CPO can assume the vehicle is parking with the nose away from the roadway (that is, entering the parking space driving forward).
+    "RIGHT"  |                                                      // The EVSE is to the right of the vehicle when parked. For streetside parking, the CPO can assume the vehicle is facing the same way as traffic on the side of the road that the EVSE is on. This means that RIGHT is used for all streetside parking in locales with right-hand traffic. For parking spaces leading sideways from a roadway, the CPO can assume the vehicle is parking with the nose away from the roadway (that is, entering the parking space driving forward).
+    "CENTER" |                                                      // The EVSE is at the center of the impassable narrow end of a parking space.
+     string;
+
+export type ParkingDirection =
+    "PARALLEL"      |                                               // Parking happens parallel to the roadway on which vehicles approach the EVSE.
+    "PERPENDICULAR" |                                               // Parking happens perpendicular to the roadway on which vehicles approach the EVSE.
+    "ANGLE"         |                                               // Parking happens at an angle to the roadway on which vehicles approach the EVSE (i.e. echelon parking).
+     string;
 
 export interface IGeoLocation {
     latitude:                       string;                         // Latitude of the point in decimal degree. Example: 50.770774. Decimal separator: "." Regex: -?[0-9]{1,2}\.[0-9]{5,7}
@@ -179,8 +218,6 @@ export type Capability =
     "CONTACTLESS_CARD_SUPPORT"         |                            // EVSE has a payment terminal that supports contactless cards.
     "CREDIT_CARD_PAYABLE"              |                            // EVSE has a payment terminal that makes it possible to pay for charging using a credit card.
     "DEBIT_CARD_PAYABLE"               |                            // EVSE has a payment terminal that makes it possible to pay for charging using a debit card.
-    "ISO_15118_2_PLUG_AND_CHARGE"      |                            // The EVSE supports authentication of the Driver using a contract certificate stored in the vehicle according to ISO 15118-2.
-    "ISO_15118_20_PLUG_AND_CHARGE"     |                            // The EVSE supports authentication of the Driver using a contract certificate stored in the vehicle according to ISO 15118-20.
     "PED_TERMINAL"                     |                            // EVSE has a payment terminal with a pin-code entry device.
     "REMOTE_START_STOP_CAPABLE"        |                            // The EVSE can remotely be started/stopped.
     "RESERVABLE"                       |                            // The EVSE can be reserved.
@@ -302,7 +339,7 @@ export type ParkingRestriction =
     "EV_ONLY"     |                                                 // Reserved parking spot for electric vehicles.
     "PLUGGED"     |                                                 // Parking is only allowed while plugged in (charging).
     "CUSTOMERS"   |                                                 // Parking spot for customers/guests only, for example in case of a hotel or shop.
-    "TAXI"        |                                                 // Parking only for taxi vehicles.
+    "TAXIS"       |                                                 // Parking only for taxi vehicles.
     "TENANTS"     |                                                 // Parking only for people who live in a complex that the Location belongs to.
      string;
 
@@ -349,9 +386,10 @@ export interface IEVSE {
     coordinates?:                   IGeoLocation;                   // Coordinates of the EVSE.
     physical_reference?:            string;                         // A number/string printed on the outside of the EVSE for visual identification.
     directions?:                    Array<IDisplayText>;            // Multi-language human-readable directions when more detailed information on how to reach the EVSE from the Location is required.
-    parking_restrictions?:          Array<ParkingRestriction>;      // The restrictions that apply to the parking spot.
+    parking:                        Array<string>;                  // A list of references to parking spaces that can be used by vehicles charging at this EVSE. The strings in this field refer to Parking objects from the EVSE’s Location’s parking_places field by their id field.
     vehicle_type:                   Array<VehicleType>;             // The vehicle types that the EVSE is intended for and that the associated parking is designed to accomodate.
     images?:                        Array<IImage>;                  // Links to images related to the EVSE such as photos or logos. At least one photograph should be provided if the value of vehicle_types includes the DISABLED vehicle type.
+    accepted_service_providers?:    Array<string>;                  // A list of the names of the eMSPs offering contract-based payment options that are accepted at this EVSE.
     created?:                       string;                         // Optional timestamp when this EVSE was created [OCPI Computer Science Extension!]
     last_updated:                   string;                         // Timestamp when this EVSE or one of its connectors was last updated (or created).
 }
@@ -372,9 +410,15 @@ export interface IConnector {
     max_electric_power?:            number;                         // Maximum electric power that can be delivered by this connector, in Watts (W). When the maximum electric power is lower than the calculated value from voltage and amperage, this value should be set. For example: A DC Charge Point which can delivers up to 920V and up to 400A can be limited to a maximum of 150kW (max_electric_power = 150000). Depending on the car, it may supply max voltage or current, but not both at the same time. For AC Charge Points, the amount of phases used can also have influence on the maximum power.
     tariff_ids?:                    Array<string>;                  // Identifiers of the currently valid charging tariffs. Multiple tariffs are possible, but only one of each Tariff.type can be active at the same time. Tariffs with the same type are only allowed if they are not active at the same time: start_date_time and end_date_time period not overlapping. When preference-based smart charging is supported, one tariff for every possible ProfileType should be provided. These tell the user about the options they have at this Connector, and what the tariff is for every option. For a "free of charge" tariff, this field should be set and point to a defined "free of charge" tariff.
     terms_and_conditions?:          string;                         // URL to the operator’s terms and conditions.
+    capabilities?:                  Array<ConnectorCapability>;     // A list of functionalities that the connector is capable of.
     created?:                       string;                         // Optional timestamp when this connector was created [OCPI Computer Science Extension!]
     last_updated:                   string;                         // Timestamp when this connector was last updated (or created).
 }
+
+export type ConnectorCapability =
+    "ISO_15118_2_PLUG_AND_CHARGE"  |                                // The Connector supports authentication of the Driver using a contract certificate stored in the vehicle according to ISO 15118-2.
+    "ISO_15118_20_PLUG_AND_CHARGE" |                                // The Connector supports authentication of the Driver using a contract certificate stored in the vehicle according to ISO 15118-20.
+     string;
 
 export type TariffType =
     "AD_HOC_PAYMENT" |                                              // Used to describe that a Tariff is valid when ad-hoc payment is used at the Charge Point (for example: Debit or Credit card payment terminal).

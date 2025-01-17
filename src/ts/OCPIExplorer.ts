@@ -23,8 +23,8 @@ import     { OCPIV2_1_1 } from './OCPIV2_1_1';
 import * as IOCPIv2_2_1   from './IOCPIv2_2_1';
 import     { OCPIV2_2_1 } from './OCPIV2_2_1';
 
-import * as IOCPIv2_3     from './IOCPIv2_3';
-import     { OCPIV2_3 }   from './OCPIv2_3';
+import * as IOCPIv2_3_0   from './IOCPIv2_3_0';
+import     { OCPIV2_3_0 } from './OCPIv2_3_0';
 
 import * as IOCPIv3_0     from './IOCPIv3_0';
 import     { OCPIV3_0 }   from './OCPIv3_0';
@@ -54,7 +54,7 @@ export class OCPIExplorer {
     private readonly common:                          OCPI.OCPI   = new OCPI.OCPI();
     private readonly ocpiv2_1_1:                      OCPIV2_1_1  = new OCPIV2_1_1(this.common);
     private readonly ocpiv2_2_1:                      OCPIV2_2_1  = new OCPIV2_2_1(this.common);
-    private readonly ocpiv2_3:                        OCPIV2_3    = new OCPIV2_3  (this.common);
+    private readonly ocpiv2_3_0:                      OCPIV2_3_0  = new OCPIV2_3_0(this.common);
     private readonly ocpiv3_0:                        OCPIV3_0    = new OCPIV3_0  (this.common);
 
     private readonly baseDiv:                         HTMLDivElement;
@@ -270,8 +270,8 @@ export class OCPIExplorer {
                     );
 
                 else if (versionId.startsWith("2.3"))
-                    this.ocpiv2_3.RenderEndpoints(
-                        ocpiResponse.data.endpoints as IOCPIv2_3.IEndpoint[],
+                    this.ocpiv2_3_0.RenderEndpoints(
+                        ocpiResponse.data.endpoints as IOCPIv2_3_0.IEndpoint[],
                         this.versionDetailsHTMLDiv
                     );
 

@@ -16,9 +16,9 @@
  */
 
 import    { OCPI, SearchResultsMode }  from './OCPICommon';
-import * as IOCPIv2_3                  from './IOCPIv2_3';
+import * as IOCPIv2_3_0                from './IOCPIv2_3_0';
 
-export class OCPIV2_3 {
+export class OCPIV2_3_0 {
 
     //#region Data
 
@@ -38,7 +38,7 @@ export class OCPIV2_3 {
 
     //#region RenderEndpoints(endpoints, container)
 
-    public RenderEndpoints(endpoints:  Array<IOCPIv2_3.IEndpoint>,
+    public RenderEndpoints(endpoints:  Array<IOCPIv2_3_0.IEndpoint>,
                            container:  HTMLDivElement): void {
 
         for (const endpoint of endpoints) {
@@ -131,8 +131,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ICDRMetadata,
-                               IOCPIv2_3.ICDR>(
+        this.common.OCPISearch<IOCPIv2_3_0.ICDRMetadata,
+                               IOCPIv2_3_0.ICDR>(
 
             CDRsURL,
             () => {
@@ -360,8 +360,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ILocationMetadata,
-                               IOCPIv2_3.ILocation>(
+        this.common.OCPISearch<IOCPIv2_3_0.ILocationMetadata,
+                               IOCPIv2_3_0.ILocation>(
 
             LocationsURL,
             () => {
@@ -505,14 +505,6 @@ export class OCPIV2_3 {
                                 "capabilities",
                                 "Capabilities",
                                 evse.capabilities.map(capability => capability).join(", ")
-                            );
-
-                        if (evse.parking_restrictions)
-                            this.common.CreateProperty(
-                                evsePropertiesDiv,
-                                "parkingRestrictions",
-                                "Parking Restrictions",
-                                evse.parking_restrictions.map(parkingRestriction => parkingRestriction).join(", ")
                             );
 
                         if (evse.images)
@@ -665,8 +657,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ISessionMetadata,
-                               IOCPIv2_3.ISession>(
+        this.common.OCPISearch<IOCPIv2_3_0.ISessionMetadata,
+                               IOCPIv2_3_0.ISession>(
 
             SessionsURL,
             () => {
@@ -843,8 +835,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ITariffMetadata,
-                               IOCPIv2_3.ITariff>(
+        this.common.OCPISearch<IOCPIv2_3_0.ITariffMetadata,
+                               IOCPIv2_3_0.ITariff>(
 
             TariffsURL,
             () => {
@@ -1170,8 +1162,8 @@ export class OCPIV2_3 {
         versionDetailsScreenDiv.style.display = "none";
         locationsScreenDiv.style.display      = "flex";
 
-        this.common.OCPISearch<IOCPIv2_3.ITokenMetadata,
-                               IOCPIv2_3.IToken>(
+        this.common.OCPISearch<IOCPIv2_3_0.ITokenMetadata,
+                               IOCPIv2_3_0.IToken>(
 
             TokensURL,
             () => {
