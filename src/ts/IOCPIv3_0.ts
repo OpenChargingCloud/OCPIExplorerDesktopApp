@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2024 GraphDefined GmbH <achim.friedland@graphdefined.com>
- * This file is part of OCPIExplorer <https://github.com/OpenChargingCloud/OCPIExplorerDesktopApp>
+ * This file is part of OCPIExplorer <https://github.com/OpenChargingCloud/OCPIExplorerWebApp>
  *
  * Licensed under the Affero GPL license, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ export type VersionNumber =
     "2.2.1" |
     "2.3"   |
     "3.0"   |
-     string;
+    (string & {});
 
 
 export type PartyId =
@@ -57,7 +57,7 @@ export type ModuleId =
     "tariffs"            |
     "tariffassociations" |
     "tokens"             |
-     string;
+    (string & {});
 
 export type InterfaceRole =
     "SENDER" |
@@ -231,7 +231,7 @@ export type Capability =
     "TOKEN_GROUP_CAPABLE"              |                            // This Charging Station supports token groups, two or more tokens work as one, so that a session can be started with one token and stopped with another (handy when a card and
                                                                     // key-fob are given to the EV-driver).
     "UNLOCK_CAPABLE"                   |                            // Connectors have mechanical lock that can be requested by the eMSP to be unlocked.
-     string;
+    (string & {});
 
 export type LocationService =
     "ACCESSIBLE_CHARGING" |                                         // One or more EVSEs have accessibility modifications in place to allow use by people with disabilities.
@@ -240,7 +240,7 @@ export type LocationService =
     "CAMERA_SURVEILLANCE" |                                         // Security monitoring with video cameras is in place at the location.
     "EMERGENCY_CALL"      |                                         // A voice communication channel is available for the Driver to contact security staff from the location.
     "WIFI"                |                                         // WLAN Internet connectivity is available at the location.
-     string;
+    (string & {});
 
 export type ConnectorFormat =
     "SOCKET" |                                                      // The connector is a socket; the EV user needs to bring a fitting plug.
@@ -289,7 +289,7 @@ export type ConnectorType =
     "SAE_J3400"             |                                       // SAE J3400, also known as North American Charging Standard (NACS), developed by Tesla, Inc in 2021.
     "TESLA_R"               |                                       // Tesla Connector "Roadster" - type(round, 4 pin)
     "TESLA_S"               |                                       // Tesla Connector "Model-S" - type(oval, 5 pin). Mechanically compatible with SAE J3400 but uses CAN bus for communication instead of power line communication.
-     string;
+    (string & {});
 
 export type EnergySourceCategory =
     "NUCLEAR"        |                                              // Nuclear power sources.
@@ -300,12 +300,12 @@ export type EnergySourceCategory =
     "SOLAR"          |                                              // Regenerative power from PV.
     "WIND"           |                                              // Regenerative power from wind turbines.
     "WATER"          |                                              // Regenerative power from water turbines.
-     string;
+    (string & {});
 
 export type EnvironmentalImpactCategory =
     "NUCLEAR_WASTE"  |                                              // Produced nuclear waste in gramms per kilowatthour.
     "CARBON_DIOXIDE" |                                              // Exhausted carbon dioxide in gramms per kilowarrhour.
-     string;
+    (string & {});
 
 export type Facility =
     "HOTEL"           |                                             // A hotel.
@@ -328,7 +328,7 @@ export type Facility =
     "CARPOOL_PARKING" |                                             // A carpool parking.
     "FUEL_STATION"    |                                             // A Fuel station.
     "WIFI"            |                                             // Wifi or other type of internet available.
-     string;
+    (string & {});
 
 export type ImageCategory =
     "CHARGER"  |                                                    // Photo of the physical device that contains one or more EVSEs.
@@ -338,7 +338,7 @@ export type ImageCategory =
     "OPERATOR" |                                                    // logo of the charge points operator, for example a municipality, to be displayed with the EVSEs detailed information view or in lists and maps, if no networkLogo is present
     "OTHER"    |                                                    // Other
     "OWNER"    |                                                    // logo of the charge points owner, for example a local store, to be displayed with the EVSEs detailed information view
-     string;
+    (string & {});
 
 export type ParkingType =
     "ALONG_MOTORWAY"     |                                          // Location on a parking facility/rest area along a motorway, freeway, interstate, highway etc.
@@ -347,7 +347,7 @@ export type ParkingType =
     "ON_DRIVEWAY"        |                                          // Location is on the driveway of a house/building.
     "ON_STREET"          |                                          // Parking in public space.
     "UNDERGROUND_GARAGE" |                                          // Multistorey car park, mainly underground.
-     string;
+    (string & {});
 
 export interface ParkingRestriction {
     group:                          Array<ParkingRestrictionGroup>; // One or more groups that drivers have to be in to be allowed to park here.
@@ -364,7 +364,7 @@ export type ParkingRestrictionGroup =
     "CUSTOMERS"   |                                                 // Parking spot for customers/guests only, for example in case of a hotel or shop.
     "TAXI"        |                                                 // Parking only for taxi vehicles.
     "TENANTS"     |                                                 // Parking only for people who live in a complex that the Location belongs to.
-     string;
+    (string & {});
 
 export type VehicleType =
     "MOTORCYCLE"                    |                               // A motorcycle
@@ -376,7 +376,7 @@ export type VehicleType =
     "TRUCK_WITH_TRAILER"            |                               // A heavy-duty truck (tractor or rigid) with a trailer attached
     "BUS"                           |                               // A bus or a motor coach
     "DISABLED"                      |                               // A vehicle with a permit for parking spaces for people with disabilities
-     string;
+    (string & {});
 
 export type PowerType =
     "AC_1_PHASE"       |                                            // AC single phase
@@ -395,7 +395,7 @@ export type Status  =
     "REMOVED"     |                                                 // The EVSE/Connector was discontinued/removed.
     "RESERVED"    |                                                 // The EVSE/Connector is reserved for a particular EV driver and is unavailable for other drivers.
     "UNKNOWN"     |                                                 // No status information available (also used when offline).
-     string;
+    (string & {});
 
 export interface IChargingStation {
     id:                             string;                         // An identifier that uniquely indentifiers this Charging Station among all Charging Stations in all Locations issued by the same Party.
@@ -492,25 +492,25 @@ export type EVSEPosition =
                                                                     // For parking bays leading sideways from a roadway, the CPO can assume the vehicle is
                                                                     // parking with the nose away from the roadway (that is, entering the parking bay driving forward).
     "CENTER" |                                                      // The EVSE is at the center of the impassable narrow end of a parking bay
-     string;
+    (string & {});
 
 export type ParkingDirection =
     "PARALLEL"      |                                               // Parking happens parallel to the roadway on which vehicles approach the EVSE.
     "PERPENDICULAR" |                                               // Parking happens perpendicular to the roadway on which vehicles approach the EVSE.
     "ANGLE"         |                                               // Parking happens at an angle to the roadway on which vehicles approach the EVSE (i.e. echelon parking).
     "DRIVE_THROUGH" |                                               // A vehicle can stop, charge, and proceed without reversing into or out of a parking bay
-     string;
+    (string & {});
 
 export type PresenceStatus =
     "PRESENT" |                                                     // The EVSE is currently present and whether it is currently usable can be indicated using the EVSE Status module.
     "PLANNED" |                                                     // The EVSE is not currently present but it is planned for the future.
     "REMOVED" |                                                     // The EVSE is not currently present but it is used to be present in the past.
-     string;
+    (string & {});
 
 export type ConnectorCapability =
     "IEC_15118_2_PLUG_AND_CHARGE"  |                                // The Connector supports authentication of the Driver using a contract certificate stored in the vehicle according to IEC 15118-2.
     "IEC_15118_20_PLUG_AND_CHARGE" |                                // The Connector supports authentication of the Driver using a contract certificate stored in the vehicle according to IEC 15118-20.
-     string;
+    (string & {});
 
 export type TariffType =
     "AD_HOC_PAYMENT" |                                              // Used to describe that a Tariff is valid when ad-hoc payment is used at the Charge Point (for example: Debit or Credit card payment terminal).
@@ -518,7 +518,7 @@ export type TariffType =
     "PROFILE_FAST"   |                                              // Used to describe that a Tariff is valid when Charging Preference: FAST is set for the session.
     "PROFILE_GREEN"  |                                              // Used to describe that a Tariff is valid when Charging Preference: GREEN is set for the session.
     "REGULAR"        |                                              // Used to describe that a Tariff is valid when using an RFID, without any Charging Preference, or when Charging Preference: REGULAR is set for the session.
-     string;
+    (string & {});
 
 
 export type TaxIncluded =
@@ -570,7 +570,8 @@ export type TariffDimension =
     "ENERGY"       |                                                // Defined in kWh, step_size multiplier: 1 Wh
     "FLAT"         |                                                // Flat fee without unit for step_size
     "PARKING_TIME" |                                                // Time not charging: defined in hours, step_size multiplier: 1 second
-    "TIME";                                                         // Time charging: defined in hours, step_size multiplier: 1 second. Can also be used in combination with a RESERVATION restriction to describe the price of the reservation time.
+    "TIME"         |                                                // Time charging: defined in hours, step_size multiplier: 1 second. Can also be used in combination with a RESERVATION restriction to describe the price of the reservation time.
+    (string & {});
 
 export interface IPriceComponent {
     type:                           TariffDimension,                // The dimension that is being priced.
@@ -655,14 +656,14 @@ export type TariffAudience =
     "PROFILE_FAST"   |                                              // Used to describe that a Tariff Association applies when Charging Preference: FAST is set for the session.
     "PROFILE_GREEN"  |                                              // Used to describe that a Tariff Association applies when Charging Preference: GREEN is set for the session.
     "REGULAR"        |                                              // Used to describe that a Tariff Association applies when using an MSP Charging Token, without any Charging Preference, or when Charging Preference: REGULAR is set for the session.
-     string;
+    (string & {});
 
 export type TokenType =
     "AD_HOC_USER" |                                                 // One time use Token ID generated by a server (or App.) The eMSP uses this to bind a Session to a customer, probably an app user.
     "APP_USER"    |                                                 // Token ID generated by a server (or App.) to identify a user of an App. The same user uses the same Token for every Session.
     "EMAID"       |                                                 // An EMAID. EMAIDs are used as Tokens when the Charging Station and the vehicle are using ISO 15118 for communication.
     "RFID"        |                                                 // RFID Token
-     string;
+    (string & {});
 
 export type Allowed =
     "ALLOWED"     |                                                 // This Token is allowed to charge at this location.
@@ -670,7 +671,7 @@ export type Allowed =
     "EXPIRED"     |                                                 // This Token has expired.
     "NO_CREDIT"   |                                                 // This Token belongs to an account that has not enough credits to charge at the given location.
     "NOT_ALLOWED" |                                                 // Token is valid, but is not allowed to charge at the given location.
-     string;
+    (string & {});
 
 export type WhitelistType =
     "ALWAYS"          |                                             // Token always has to be whitelisted, realtime authorization is not possible/allowed. CPO shall always allow any use of this Token.
@@ -683,7 +684,7 @@ export type ProfileType =
     "FAST"    |                                                     // Driver wants his EV charged as quickly as possible and is willing to pay a premium for this, if needed.
     "GREEN"   |                                                     // Driver wants his EV charged with as much regenerative (green) energy as possible.
     "REGULAR" |                                                     // Driver does not have special preferences.
-     string;
+    (string & {});
 
 export interface IEnergyContract {
     supplier_name:                  string;                         // Name of the energy supplier for this token.
@@ -727,7 +728,7 @@ export interface ITokenMetadata extends TMetadataDefaults {
 export type AuthMethod =
     "AUTH_REQUEST" |                                                // Authentication request from the eMSP
     "WHITELIST"    |                                                // Whitelist used to authenticate, no request done to the eMSP
-     string;
+    (string & {});
 
 export type CdrDimensionType =
     "ENERGY"       |                                                // defined in kWh, default step_size is 1 Wh
@@ -736,7 +737,7 @@ export type CdrDimensionType =
     "MIN_CURRENT"  |                                                // defined in A (Ampere), Minimum current used during charging session
     "PARKING_TIME" |                                                // time not charging: defined in hours, default step_size is 1 second
     "TIME"         |                                                // time charging: defined in hours, default step_size is 1 second
-     string;
+    (string & {});
 
 export type SessionStatus =
     "ACTIVE"      |                                                 // The session has been accepted and is active. All pre-conditions were met: Communication between EV and EVSE (for example: cable plugged in correctly), EV or driver is authorized.
@@ -745,7 +746,7 @@ export type SessionStatus =
     "INVALID"     |                                                 // The Session object using this state is declared invalid and will not be billed.
     "PENDING"     |                                                 // The session is pending, it has not yet started. Not all pre-conditions are met. This is the initial state. The session might never become an active session.
     "RESERVATION" |                                                 // The session is started due to a reservation, charging has not yet started. The session might never become an active session.
-     string;
+    (string & {});
 
 export interface ICDRDimension {
     type:                           CdrDimensionType;               // Type of cdr dimension
@@ -829,7 +830,7 @@ export type SignedDataEncodingMethod =
     "Alfen Eichrecht"            |                                  // Alfen Eichrecht encoding / implementation
     "EDL40 E-Mobility Extension" |                                  // eBee smart technologies implementation
     "EDL40 Mennekes"             |                                  // Mennekes implementation
-     string;
+    (string & {});
 
 export interface ISignedData {
     encoding_method:                SignedDataEncodingMethod;       // The name of the encoding used in the SignedData field. This is the name given to the encoding by a company or group of companies. See note below.
@@ -885,7 +886,7 @@ export type Role =
     "NSP"   |                                                       // Navigation Service Provider Role, role like an eMSP (probably only interested in Location information).
     "OTHER" |                                                       // Other role.
     "SCSP"  |                                                       // Smart Charging Service Provider Role.
-     string;
+    (string & {});
 
 export interface IRemoteParty {
     //id:                              string;

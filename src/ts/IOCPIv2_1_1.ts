@@ -1,6 +1,6 @@
 /*
  * Copyright 2014-2024 GraphDefined GmbH <achim.friedland@graphdefined.com>
- * This file is part of OCPIExplorer <https://github.com/OpenChargingCloud/OCPIExplorerDesktopApp>
+ * This file is part of OCPIExplorer <https://github.com/OpenChargingCloud/OCPIExplorerWebApp>
  *
  * Licensed under the Affero GPL license, Version 3.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ export type VersionNumber =
     "2.2.1" |
     "2.3"   |
     "3.0"   |
-     string;
+    (string & {});
 
 export interface IVersion {
     version:                        VersionNumber;                  // The version number.
@@ -58,7 +58,7 @@ export type ModuleId =
     "sessions"         |
     "tariffs"          |
     "tokens"           |
-     string;
+    (string & {});
 
 export interface IEndpoint {
     identifier:                     ModuleId;                       // The identifier of the endpoint.
@@ -153,7 +153,7 @@ export type Capability =
     "RESERVABLE"                |                                   // The EVSE can be reserved.
     "RFID_READER"               |                                   // Charging at this EVSE can be authorized with a RFID token
     "UNLOCK_CAPABLE"            |                                   // Connectors have mechanical lock that can be requested by the eMSP to be unlocked.
-     string;
+    (string & {});
 
 export type ConnectorFormat =
     "SOCKET" |                                                      // The connector is a socket; the EV user needs to bring a fitting plug.
@@ -185,7 +185,7 @@ export type ConnectorType =
     "IEC_62196_T3C"         |                                       // IEC 62196 Type 3C "Scame"
     "TESLA_R"               |                                       // Tesla Connector "Roadster" - type(round, 4 pin)
     "TESLA_S"               |                                       // Tesla Connector "Model-S" - type(oval, 5 pin)
-     string;
+    (string & {});
 
 export type EnergySourceCategory =
     "NUCLEAR"        |                                              // Nuclear power sources.
@@ -196,7 +196,7 @@ export type EnergySourceCategory =
     "SOLAR"          |                                              // Regenerative power from PV.
     "WIND"           |                                              // Regenerative power from wind turbines.
     "WATER"          |                                              // Regenerative power from water turbines.
-     string;
+    (string & {});
 
 export type EnvironmentalImpactCategory =
     "NUCLEAR_WASTE"  |                                              // Produced nuclear waste in gramms per kilowatthour.
@@ -220,7 +220,7 @@ export type Facility =
     "CARPOOL_PARKING" |                                             // A carpool parking.
     "FUEL_STATION"    |                                             // A Fuel station.
     "WIFI"            |                                             // Wifi or other type of internet available.
-     string;
+    (string & {});
 
 export type ImageCategory =
     "CHARGER"  |                                                    // Photo of the physical device that contains one or more EVSEs.
@@ -230,7 +230,7 @@ export type ImageCategory =
     "OPERATOR" |                                                    // logo of the charge points operator, for example a municipality, to be displayed with the EVSEs detailed information view or in lists and maps, if no networkLogo is present
     "OTHER"    |                                                    // Other
     "OWNER"    |                                                    // logo of the charge points owner, for example a local store, to be displayed with the EVSEs detailed information view
-     string;
+    (string & {});
 
 export type LocationType =
     "ON_STREET"          |                                          // Parking in public space.
@@ -239,7 +239,7 @@ export type LocationType =
     "PARKING_LOT"        |                                          // A cleared area that is intended for parking vehicles, i.e.at super markets, bars, etc.
     "OTHER"              |                                          // None of the given possibilities.
     "UNKNOWN"            |                                          // Parking location type is not known by the operator (default).
-     string;
+    (string & {});
 
 export type ParkingRestriction =
     "EV_ONLY"     |                                                 // Reserved parking spot for electric vehicles.
@@ -247,7 +247,7 @@ export type ParkingRestriction =
     "DISABLED"    |                                                 // Reserved parking spot for disabled people with valid ID.
     "CUSTOMERS"   |                                                 // Parking spot for customers/guests only, for example in case of a hotel or shop.
     "MOTORCYCLES" |                                                 // Parking spot only suitable for (electric) motorcycles or scooters.
-     string;
+    (string & {});
 
 export type PowerType =
     "AC_1_PHASE" |                                                  // AC mono phase.
@@ -264,7 +264,7 @@ export type Status  =
     "REMOVED"     |                                                 // The EVSE / Connector / charge point is discontinued / removed.
     "RESERVED"    |                                                 // The EVSE / Connector is reserved for a particular EV driver and is unavailable for other drivers.
     "UNKNOWN"     |                                                 // No status information available. (Also used when offline)
-     string;
+    (string & {});
 
 export interface IEVSE {
     uid:                            string;                         // Uniquely identifies the EVSE within the CPOs platform (and suboperator platforms). For example a database unique ID or the "EVSE ID". This field can never be changed, modified or renamed. This is the 'technical' identification of the EVSE, not to be used as 'human readable' identification, use the field: evse_id for that.
@@ -327,7 +327,8 @@ export type TariffDimension =
     "ENERGY"       |                                                // defined in kWh, step_size multiplier: 1 Wh
     "FLAT"         |                                                // flat fee, no unit
     "PARKING_TIME" |                                                // time not charging: defined in hours, step_size multiplier: 1 second
-    "TIME";                                                         // time charging: defined in hours, step_size multiplier: 1 second
+    "TIME"         |                                                // time charging: defined in hours, step_size multiplier: 1 second
+    (string & {});
 
 export interface IPriceComponent {
     type:                           TariffDimension,                // Type of tariff dimension
@@ -362,7 +363,7 @@ export interface ITariffRestrictions {
 export type TokenType =
     "OTHER" |                                                       // Other type of token
     "RFID"  |                                                       // RFID Token
-     string;
+    (string & {});
 
 export type Allowed =
     "ALLOWED"     |                                                 // This Token is allowed to charge at this location.
@@ -370,7 +371,7 @@ export type Allowed =
     "EXPIRED"     |                                                 // This Token has expired.
     "NO_CREDIT"   |                                                 // This Token belongs to an account that has not enough credits to charge at the given location.
     "NOT_ALLOWED" |                                                 // Token is valid, but is not allowed to charge at the given location.
-     string;
+    (string & {});
 
 export type WhitelistType =
     "ALWAYS"          |                                             // Token always has to be whitelisted, realtime authorization is not possible/allowed.
@@ -399,7 +400,7 @@ export interface ITokenMetadata extends TMetadataDefaults {
 export type AuthMethod =
     "AUTH_REQUEST" |                                                // Authentication request from the eMSP
     "WHITELIST"    |                                                // Whitelist used to authenticate, no request done to the eMSP
-     string;
+    (string & {});
 
 export type CdrDimensionType =
     "ENERGY"       |                                                // defined in kWh, default step_size is 1 Wh
@@ -408,14 +409,14 @@ export type CdrDimensionType =
     "MIN_CURRENT"  |                                                // defined in A (Ampere), Minimum current used during charging session
     "PARKING_TIME" |                                                // time not charging: defined in hours, default step_size is 1 second
     "TIME"         |                                                // time charging: defined in hours, default step_size is 1 second
-     string;
+    (string & {});
 
 export type SessionStatus =
     "ACTIVE"    |                                                   // The session is accepted and active. Al pre-condition are met: Communication between EV and EVSE (for example: cable plugged in correctly), EV or Driver is authorized. EV is being charged, or can be charged. Energy is, or is not, being transfered.
     "COMPLETED" |                                                   // The session is finished successfully. No more modifications will be made to this session.
     "INVALID"   |                                                   // The session is declared invalid and will not be billed.
     "PENDING"   |                                                   // The session is pending, it has not yet started. Not all pre-condition are met. This is the initial state. This session might never become an active session.
-     string;
+    (string & {});
 
 export interface ICDRDimension {
     type:                           CdrDimensionType;               // Type of cdr dimension

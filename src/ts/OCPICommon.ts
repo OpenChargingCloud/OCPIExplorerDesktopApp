@@ -149,6 +149,9 @@ export class OCPI {
         if (this.ocpiAccessToken.length > 0)
             ajax.setRequestHeader("Authorization", "Token " + (this.ocpiAccessTokenEncoding ? btoa(this.ocpiAccessToken) : this.ocpiAccessToken));
 
+        ajax.setRequestHeader("X-Request-ID",     Math.random().toString(36).substring(2, 14));
+        ajax.setRequestHeader("X-Correlation-ID", Math.random().toString(36).substring(2, 14));
+
         ajax.onreadystatechange = function () {
 
             // 0 UNSENT | 1 OPENED | 2 HEADERS_RECEIVED | 3 LOADING | 4 DONE
@@ -186,6 +189,9 @@ export class OCPI {
 
             if (this.ocpiAccessToken.length > 0)
                 ajax.setRequestHeader("Authorization", "Token " + (this.ocpiAccessTokenEncoding ? btoa(this.ocpiAccessToken) : this.ocpiAccessToken));
+
+            ajax.setRequestHeader("X-Request-ID",     Math.random().toString(36).substring(2, 14));
+            ajax.setRequestHeader("X-Correlation-ID", Math.random().toString(36).substring(2, 14));
 
             ajax.onreadystatechange = function () {
                 if (this.readyState == 4) {

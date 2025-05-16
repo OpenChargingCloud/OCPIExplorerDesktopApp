@@ -116,7 +116,7 @@ export class OCPIExplorer {
 
             this.common.SetAccessToken(
                 this.ocpiAccessTokenInput.value.trim(),
-                this.ocpiAccessTokenInput.checked
+                this.accessTokenEncodingCheck.checked
             );
 
             if (this.common.isValidURL(ocpiEndpointURL)) {
