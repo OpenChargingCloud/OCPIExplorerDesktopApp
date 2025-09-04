@@ -27,7 +27,7 @@
     "@types/node": "^22.15.18",
     "@types/ws": "^8.18.1",
     "css-loader": "^7.1.2",
-    "electron": "^36.2.1",
+    "electron": "^36.8.1",
     "electron-builder": "^26.0.12",
     "electron-localshortcut": "^3.2.1",
     "file-loader": "^6.2.0",
